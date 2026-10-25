@@ -3,7 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CineLog AI - Tu Curador Personal</title>
+  <title>CineLog AI - Obsidian Cinema & Gold Glass</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -12,8 +15,8 @@
         extend: {
           colors: {
             brand: {
-              500: 'var(--brand-color, #6366f1)',
-              600: 'var(--brand-hover, #4f46e5)'
+              500: '#f59e0b',
+              600: '#d97706'
             }
           }
         }
@@ -23,10 +26,10 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
-      --brand-color: #6366f1;
-      --brand-hover: #4f46e5;
+      --brand-color: #f59e0b;
+      --brand-hover: #d97706;
     }
-    .theme-indigo { --brand-color: #6366f1; --brand-hover: #4f46e5; }
+    .theme-indigo { --brand-color: #f59e0b; --brand-hover: #d97706; }
     .theme-red { --brand-color: #e50914; --brand-hover: #b80710; }
     .theme-emerald { --brand-color: #10b981; --brand-hover: #059669; }
     .theme-purple { --brand-color: #a855f7; --brand-hover: #9333ea; }
@@ -36,28 +39,40 @@
     .dynamic-border { border-color: var(--brand-color); }
   </style>
 </head>
-<body id="app-body" class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans theme-indigo">
+<body id="app-body" class="bg-[#0B0C10] text-zinc-100 min-h-screen flex flex-col font-['Plus_Jakarta_Sans',sans-serif] antialiased tracking-tight theme-indigo">
 
   <!-- Header -->
-  <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-40 px-4 py-3">
+  <header class="border-b border-white/5 bg-[#0B0C10]/85 backdrop-blur-md sticky top-0 z-40 px-4 py-3">
     <div class="max-w-6xl mx-auto flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <i class="fa-solid fa-clapperboard dynamic-text text-2xl"></i>
-        <h1 class="text-xl font-bold tracking-tight">CineLog <span class="text-xs dynamic-bg/20 dynamic-text px-2 py-0.5 rounded-full border border-indigo-500/30">AI</span></h1>
+        <i class="fa-solid fa-clapperboard text-amber-400 text-2xl"></i>
+        <h1 class="text-xl font-bold tracking-tight text-white">CineLog <span class="text-xs bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded-full border border-amber-500/30">AI</span></h1>
       </div>
       
       <!-- Navegación entre Vistas -->
       <div class="flex items-center gap-2">
-        <nav class="flex bg-slate-950 p-1 rounded-xl border border-slate-800 text-xs font-semibold">
-          <button id="nav-btn-catalog" onclick="switchView('catalog')" class="px-3 py-1.5 rounded-lg dynamic-bg text-white transition flex items-center gap-1.5">
+        <nav class="flex bg-[#13151D] p-1 rounded-xl border border-white/5 text-xs font-semibold">
+          <button id="nav-btn-catalog" onclick="switchView('catalog')" class="px-4 py-1.5 bg-amber-500 text-black font-semibold shadow-lg shadow-amber-500/20 rounded-xl transition flex items-center gap-1.5">
             <i class="fa-solid fa-table-cells"></i> Catálogo
           </button>
-          <button id="nav-btn-chat" onclick="switchView('chat')" class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white transition flex items-center gap-1.5">
+          <button id="nav-btn-profile" onclick="switchView('profile')" class="px-3 py-1.5 rounded-xl text-zinc-400 hover:text-white transition flex items-center gap-1.5">
+            <i class="fa-solid fa-user-gear"></i> Mi Perfil
+          </button>
+          <button id="nav-btn-trending" onclick="switchView('trending')" class="px-3 py-1.5 rounded-xl text-zinc-400 hover:text-white transition flex items-center gap-1.5">
+            <i class="fa-solid fa-fire"></i> Explorar
+          </button>
+          <button id="nav-btn-chat" onclick="switchView('chat')" class="px-3 py-1.5 rounded-xl text-zinc-400 hover:text-white transition flex items-center gap-1.5">
             <i class="fa-solid fa-comments"></i> Chat CineLog
           </button>
         </nav>
-        <button onclick="openSettingsModal()" class="text-slate-400 hover:text-white p-2 rounded-lg hover:bg-slate-800 transition" title="Administración, Reglas y Diseño">
-          <i class="fa-solid fa-gear"></i>
+        
+        <!-- Botón Ruleta / Sorpréndeme -->
+        <button onclick="openRouletteModal()" class="w-full py-2 px-3 rounded-xl bg-white/5 hover:bg-amber-500 hover:text-black text-zinc-300 font-medium text-xs tracking-wide border border-white/10 hover:border-amber-500 transition-all duration-200 flex items-center justify-center gap-1.5" title="Sorpréndeme / Qué ver hoy">
+          <i class="fa-solid fa-dice text-sm text-amber-400 animate-pulse"></i> <span class="hidden sm:inline">Sorpréndeme</span>
+        </button>
+
+        <button onclick="openSettingsModal()" class="text-zinc-400 hover:text-white p-2 rounded-xl hover:bg-white/5 border border-white/5 transition" title="Administración, Reglas y Diseño">
+          <i class="fa-solid fa-gear text-sm"></i>
         </button>
       </div>
     </div>
@@ -67,120 +82,316 @@
   <main id="view-catalog" class="max-w-6xl mx-auto p-4 flex-1 w-full space-y-6">
     <!-- Métricas -->
     <section class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
-      <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl">
-        <p class="text-xs text-slate-400">Total Vistos</p>
-        <p id="stat-total" class="text-2xl font-black dynamic-text">0</p>
+      <div class="bg-[#13151D] border border-white/5 p-4 rounded-2xl shadow-xl">
+        <p class="text-xs text-zinc-400">Total Vistos</p>
+        <p id="stat-total" class="text-2xl font-black text-white mt-1">0</p>
       </div>
-      <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl">
-        <p class="text-xs text-slate-400">Promedio Nota</p>
-        <p id="stat-avg" class="text-2xl font-black text-amber-400">0.0</p>
+      <div class="bg-[#13151D] border border-white/5 p-4 rounded-2xl shadow-xl">
+        <p class="text-xs text-zinc-400">Promedio Nota</p>
+        <p id="stat-avg" class="text-2xl font-black text-amber-400 mt-1">0.0</p>
       </div>
-      <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl">
-        <p class="text-xs text-slate-400">Top 9.0+</p>
-        <p id="stat-top" class="text-2xl font-black text-emerald-400">0</p>
+      <div class="bg-[#13151D] border border-white/5 p-4 rounded-2xl shadow-xl">
+        <p class="text-xs text-zinc-400">Top 9.0+</p>
+        <p id="stat-top" class="text-2xl font-black text-emerald-400 mt-1">0</p>
       </div>
-      <div class="bg-slate-900 border border-slate-800 p-3 rounded-xl">
-        <p class="text-xs text-slate-400">Watchlist</p>
-        <p id="stat-watchlist" class="text-2xl font-black text-purple-400">0</p>
+      <div class="bg-[#13151D] border border-white/5 p-4 rounded-2xl shadow-xl">
+        <p class="text-xs text-zinc-400">Watchlist</p>
+        <p id="stat-watchlist" class="text-2xl font-black text-amber-500 mt-1">0</p>
       </div>
     </section>
 
     <!-- Buscador y Filtros -->
-    <div class="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
-      <div class="flex flex-wrap items-center gap-2">
-        <div class="flex gap-1.5 overflow-x-auto pb-1 sm:pb-0">
-          <button onclick="setFilter('all')" class="filter-btn active dynamic-bg text-white text-xs px-3 py-1.5 rounded-lg" data-filter="all">Todos</button>
-          <button onclick="setFilter('Película')" class="filter-btn bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs px-3 py-1.5 rounded-lg" data-filter="Película">Películas</button>
-          <button onclick="setFilter('Serie')" class="filter-btn bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs px-3 py-1.5 rounded-lg" data-filter="Serie">Series</button>
-          <button onclick="setFilter('Anime')" class="filter-btn bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs px-3 py-1.5 rounded-lg" data-filter="Anime">Anime</button>
-          <button onclick="setFilter('Watchlist')" class="filter-btn bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs px-3 py-1.5 rounded-lg" data-filter="Watchlist">Por Ver</button>
+    <div class="flex flex-col gap-3">
+      <div class="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
+        <div class="flex flex-wrap items-center gap-2">
+          <div class="flex gap-1.5 overflow-x-auto pb-1 sm:pb-0">
+            <button onclick="setFilter('all')" class="filter-btn active bg-amber-500 text-black font-semibold shadow-lg shadow-amber-500/20 text-xs px-3.5 py-1.5 rounded-xl transition" data-filter="all">Todos</button>
+            <button onclick="setFilter('Película')" class="filter-btn bg-[#13151D] hover:bg-white/5 text-zinc-300 border border-white/5 text-xs px-3.5 py-1.5 rounded-xl transition" data-filter="Película">Películas</button>
+            <button onclick="setFilter('Serie')" class="filter-btn bg-[#13151D] hover:bg-white/5 text-zinc-300 border border-white/5 text-xs px-3.5 py-1.5 rounded-xl transition" data-filter="Serie">Series</button>
+            <button onclick="setFilter('Anime')" class="filter-btn bg-[#13151D] hover:bg-white/5 text-zinc-300 border border-white/5 text-xs px-3.5 py-1.5 rounded-xl transition" data-filter="Anime">Anime</button>
+            <button onclick="setFilter('Watchlist')" class="filter-btn bg-[#13151D] hover:bg-white/5 text-zinc-300 border border-white/5 text-xs px-3.5 py-1.5 rounded-xl transition" data-filter="Watchlist">Por Ver</button>
+          </div>
+          <div class="relative flex-1 sm:w-48">
+            <input type="text" id="inp-search" oninput="renderCatalog()" placeholder="Buscar título o director..." class="w-full bg-[#13151D] border border-white/5 rounded-xl px-3 py-1.5 text-xs text-zinc-200 focus:outline-none focus:border-amber-500 pl-8">
+            <i class="fa-solid fa-magnifying-glass text-[10px] text-zinc-500 absolute left-3 top-2.5"></i>
+          </div>
+          <div class="relative">
+            <select id="inp-sort" onchange="renderCatalog()" class="bg-[#13151D] border border-white/5 rounded-xl px-3 py-1.5 text-xs text-zinc-200 focus:outline-none focus:border-amber-500 appearance-none pr-8">
+              <option value="newest">Más recientes</option>
+              <option value="oldest">Más antiguos</option>
+              <option value="rating-desc">Mejor calificados</option>
+              <option value="rating-asc">Peor calificados</option>
+              <option value="title-asc">Título (A-Z)</option>
+              <option value="title-desc">Título (Z-A)</option>
+            </select>
+            <i class="fa-solid fa-sort text-[10px] text-zinc-500 absolute right-3 top-2.5 pointer-events-none"></i>
+          </div>
         </div>
-        <div class="relative flex-1 sm:w-48">
-          <input type="text" id="inp-search" oninput="renderCatalog()" placeholder="Buscar título o director..." class="w-full bg-slate-900 border border-slate-800 rounded-lg px-2.5 py-1 text-xs text-slate-200 focus:outline-none focus:border-indigo-500 pl-7">
-          <i class="fa-solid fa-magnifying-glass text-[10px] text-slate-500 absolute left-2.5 top-2.5"></i>
+
+        <div class="flex items-center gap-2 justify-between sm:justify-end">
+          <!-- Alternador de Vista (Cuadrícula vs Lista Compacta) -->
+          <div class="flex bg-[#13151D] border border-white/5 p-1 rounded-xl text-xs">
+            <button onclick="setLayoutMode('grid')" id="layout-btn-grid" class="px-3 py-1.5 rounded-lg bg-amber-500 text-black font-semibold transition" title="Vista Cuadrícula">
+              <i class="fa-solid fa-table-cells-large"></i>
+            </button>
+            <button onclick="setLayoutMode('list')" id="layout-btn-list" class="px-3 py-1.5 rounded-lg text-zinc-400 hover:text-white transition" title="Vista Lista Compacta">
+              <i class="fa-solid fa-list"></i>
+            </button>
+          </div>
+
+          <div class="flex gap-2">
+            <button onclick="openRegisterModal()" class="py-1.5 px-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-semibold text-xs transition flex items-center gap-1.5 shadow-lg shadow-amber-500/20">
+              <i class="fa-solid fa-plus"></i> Registrar
+            </button>
+            <button onclick="exportCSV()" class="bg-[#13151D] hover:bg-white/5 border border-white/5 text-zinc-300 text-xs px-3.5 py-1.5 rounded-xl transition" title="Descargar CSV">
+              <i class="fa-solid fa-file-csv"></i>
+            </button>
+          </div>
         </div>
       </div>
 
-      <div class="flex gap-2">
-        <button onclick="openRegisterModal()" class="dynamic-bg dynamic-bg-hover text-white text-xs font-semibold px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition">
-          <i class="fa-solid fa-plus"></i> Registrar
-        </button>
-        <button onclick="exportCSV()" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 text-xs px-3 py-1.5 rounded-lg" title="Descargar CSV">
-          <i class="fa-solid fa-file-csv"></i>
-        </button>
+      <!-- Barra de Filtros Rápidos por Género / Categoría -->
+      <div id="genre-filters-bar" class="flex gap-1.5 overflow-x-auto pb-1 text-xs items-center">
+        <span class="text-[11px] text-zinc-400 font-semibold shrink-0 mr-1"><i class="fa-solid fa-tags text-amber-400"></i> Género:</span>
+        <button onclick="setGenreFilter('all')" class="genre-filter-btn px-3 py-1 rounded-lg bg-amber-500 text-black font-semibold shrink-0 transition" data-genre="all">Todos</button>
       </div>
     </div>
 
     <!-- Galería / Lista de Tarjetas -->
-    <section id="catalog" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4"></section>
+    <section id="catalog" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5"></section>
 
-    <div id="empty-state" class="hidden text-center py-16 text-slate-500 space-y-3">
-      <i class="fa-solid fa-film text-4xl"></i>
-      <p>No hay elementos para mostrar.</p>
+    <div id="empty-state" class="hidden text-center py-20 text-zinc-500 space-y-3">
+      <i class="fa-solid fa-film text-4xl text-amber-500/40"></i>
+      <p class="text-sm font-medium">No hay elementos para mostrar en esta sección.</p>
     </div>
   </main>
 
-  <!-- VISTA 2: CHAT CON LA IA DE CINELOG -->
+  <!-- VISTA 2: MI PERFIL (ESTADÍSTICAS Y MÉTRICAS POR PLATAFORMA) -->
+  <main id="view-profile" class="hidden max-w-6xl mx-auto p-4 flex-1 w-full space-y-6">
+    <div class="flex items-center justify-between">
+      <div>
+        <h2 class="text-xl font-extrabold text-white flex items-center gap-2">
+          <i class="fa-solid fa-user-gear text-amber-400"></i> Mi Perfil Analítico y Rendimiento por Plataforma
+        </h2>
+        <p class="text-xs text-zinc-400">Análisis detallado de satisfacción, calificaciones y distribución por cada plataforma activa.</p>
+      </div>
+      <button onclick="switchView('catalog')" class="bg-[#13151D] hover:bg-white/5 border border-white/5 text-zinc-300 text-xs px-3.5 py-1.5 rounded-xl transition">
+        Volver al Catálogo
+      </button>
+    </div>
+
+    <!-- KPIs Principales -->
+    <section class="grid grid-cols-2 sm:grid-cols-4 gap-4" id="profile-kpis">
+      <!-- Generado dinámicamente -->
+    </section>
+
+    <!-- Sección Destacada: Rendimiento y Calidad por Plataforma -->
+    <div class="bg-[#13151D] border border-white/5 rounded-2xl p-5 space-y-4 shadow-xl">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-white/5">
+        <div>
+          <h3 class="text-sm font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-chart-line text-amber-400"></i> Rendimiento y Calidad por Plataforma
+          </h3>
+          <p class="text-[11px] text-zinc-400">Evaluación de obras y desglose de notas por servicio de streaming.</p>
+        </div>
+        <div id="best-platform-badge" class="flex items-center gap-1.5 bg-amber-500/10 border border-amber-500/30 text-amber-400 px-3 py-1.5 rounded-xl text-xs font-semibold">
+          <!-- Plataforma mejor valorada -->
+        </div>
+      </div>
+      
+      <!-- Contenedor de Tarjetas de Plataformas -->
+      <div id="platforms-analytics-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-1">
+        <!-- Generado dinámicamente -->
+      </div>
+    </div>
+
+    <!-- Gráficos Analíticos Adicionales -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Gráfico de Barras de Géneros -->
+      <div class="bg-[#13151D] border border-white/5 rounded-2xl p-5 space-y-4 shadow-xl">
+        <div class="flex items-center justify-between">
+          <h3 class="text-sm font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-chart-bar text-amber-400"></i> Top Géneros Más Vistos
+          </h3>
+          <span class="text-[10px] text-zinc-400">Distribución porcentual</span>
+        </div>
+        <div id="profile-genres-chart" class="space-y-3">
+          <!-- Barras de progreso -->
+        </div>
+      </div>
+
+      <!-- Histograma de Calificaciones -->
+      <div class="bg-[#13151D] border border-white/5 rounded-2xl p-5 space-y-4 shadow-xl">
+        <div class="flex items-center justify-between">
+          <h3 class="text-sm font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-chart-pie text-amber-400"></i> Histograma Global de Calificaciones
+          </h3>
+          <span class="text-[10px] text-zinc-400">Por rangos de notas</span>
+        </div>
+        <div id="profile-histogram-chart" class="space-y-3">
+          <!-- Histograma -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Resumen de Suscripciones Activas -->
+    <div class="bg-[#13151D] border border-white/5 rounded-2xl p-5 space-y-3 shadow-xl">
+      <h3 class="text-sm font-bold text-white flex items-center gap-2">
+        <i class="fa-solid fa-tv text-amber-400"></i> Suscripciones Activas Configuradas
+      </h3>
+      <div id="profile-subscriptions-list" class="flex flex-wrap gap-2 pt-1">
+        <!-- Badges de suscripciones -->
+      </div>
+    </div>
+  </main>
+
+  <!-- VISTA 3: EXPLORAR TENDENCIAS -->
+  <main id="view-trending" class="hidden max-w-6xl mx-auto p-4 flex-1 w-full space-y-6">
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div>
+        <h2 class="text-xl font-extrabold text-white flex items-center gap-2">
+          <i class="fa-solid fa-fire text-amber-400"></i> Explorar Tendencias Semanales
+        </h2>
+        <p class="text-xs text-zinc-400">Descubre lo más popular en TMDB y agrégalo a tu catálogo con un solo clic.</p>
+      </div>
+
+      <!-- Filtros de Tendencias -->
+      <div class="flex bg-[#13151D] border border-white/5 p-1 rounded-xl text-xs font-semibold">
+        <button onclick="setTrendingFilter('all')" id="trend-filter-all" class="px-3.5 py-1.5 rounded-lg bg-amber-500 text-black font-semibold transition">Todo</button>
+        <button onclick="setTrendingFilter('movie')" id="trend-filter-movie" class="px-3.5 py-1.5 rounded-lg text-zinc-400 hover:text-white transition">Películas</button>
+        <button onclick="setTrendingFilter('tv')" id="trend-filter-tv" class="px-3.5 py-1.5 rounded-lg text-zinc-400 hover:text-white transition">Series / Anime</button>
+      </div>
+    </div>
+
+    <div id="trending-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5"></div>
+  </main>
+
+  <!-- VISTA 4: CHAT CON LA IA DE CINELOG -->
   <main id="view-chat" class="hidden max-w-4xl mx-auto p-4 flex-1 w-full flex flex-col h-[calc(100vh-75px)]">
-    <div class="bg-slate-900 border border-slate-800 p-3 rounded-t-2xl flex items-center justify-between">
+    <div class="bg-[#13151D] border border-white/5 p-3.5 rounded-t-2xl flex items-center justify-between">
       <div class="flex items-center gap-2.5">
-        <div class="w-8 h-8 rounded-lg dynamic-bg/20 border border-indigo-500/40 flex items-center justify-center dynamic-text">
+        <div class="w-8 h-8 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400">
           <i class="fa-solid fa-wand-magic-sparkles text-sm"></i>
         </div>
         <div>
           <h3 class="text-sm font-bold text-white">Chat Curador CineLog</h3>
-          <p class="text-[11px] text-slate-400">Conectado a tus calificaciones y reglas personalizadas</p>
+          <p class="text-[11px] text-zinc-400">Conectado a tus plataformas activas, calificaciones y géneros</p>
         </div>
       </div>
-      <button onclick="clearChatHistory()" class="text-slate-400 hover:text-red-400 text-xs p-1.5 rounded-lg transition" title="Limpiar conversación">
+      <button onclick="clearChatHistory()" class="text-zinc-400 hover:text-rose-400 text-xs p-1.5 rounded-lg transition" title="Limpiar conversación">
         <i class="fa-solid fa-trash-can"></i>
       </button>
     </div>
 
-    <div id="chat-messages" class="flex-1 bg-slate-950/70 border-x border-slate-800 p-4 overflow-y-auto space-y-3">
+    <div id="chat-messages" class="flex-1 bg-[#0B0C10] border-x border-white/5 p-4 overflow-y-auto space-y-3">
       <div class="flex items-start gap-3">
-        <div class="w-7 h-7 rounded-full dynamic-bg flex items-center justify-center text-xs text-white shrink-0">AI</div>
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl rounded-tl-sm p-3 text-xs text-slate-200 max-w-[85%] leading-relaxed">
-          ¡Hola! Soy tu asistente de <strong>CineLog</strong>. Conozco tus calificaciones y suscripciones activas (Netflix, Max, Prime Video, DGO, Crunchyroll y Disney+).<br><br>
-          ¿Qué te gustaría ver hoy o qué película quieres que analicemos?
+        <div class="w-7 h-7 rounded-full bg-amber-500 text-black font-bold flex items-center justify-center text-xs shrink-0">AI</div>
+        <div class="bg-[#13151D] border border-white/5 rounded-2xl rounded-tl-sm p-3.5 text-xs text-zinc-200 max-w-[85%] leading-relaxed shadow-xl">
+          ¡Hola! Soy tu asistente de <strong>CineLog</strong>. Analizo tus plataformas activas, calificaciones y géneros favoritos.<br><br>
+          ¿Qué te gustaría ver hoy?
         </div>
       </div>
     </div>
 
-    <div class="bg-slate-900 border border-slate-800 p-3 rounded-b-2xl">
+    <div class="bg-[#13151D] border border-white/5 p-3.5 rounded-b-2xl">
       <form onsubmit="sendChatMessage(event)" class="flex gap-2">
-        <input type="text" id="chat-input" placeholder="ej. Dame un anime de peleas en Crunchyroll o una película oscura en Max..." class="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs sm:text-sm focus:border-indigo-500 focus:outline-none">
-        <button type="submit" id="chat-send-btn" class="dynamic-bg dynamic-bg-hover text-white px-4 py-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition">
+        <input type="text" id="chat-input" placeholder="ej. Recomiéndame una película o anime disponible en mis plataformas..." class="flex-1 bg-[#0B0C10] border border-white/5 rounded-xl px-3 py-2 text-xs sm:text-sm focus:border-amber-500 focus:outline-none text-zinc-200">
+        <button type="submit" id="chat-send-btn" class="py-2 px-4 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-semibold text-xs transition flex items-center gap-1.5 shadow-lg shadow-amber-500/20">
           <i class="fa-solid fa-paper-plane"></i>
         </button>
       </form>
     </div>
   </main>
 
+  <!-- MODAL: DETALLE CINEMÁTICO -->
+  <div id="modal-detail" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-2 sm:p-4 overflow-y-auto">
+    <div class="bg-[#13151D] border border-white/5 rounded-2xl w-full max-w-2xl overflow-hidden shadow-2xl relative transform transition-all scale-95 opacity-0 duration-300" id="modal-detail-content">
+      <button onclick="closeModal('modal-detail')" class="absolute top-3 right-3 z-20 bg-black/70 hover:bg-black text-white w-8 h-8 rounded-full flex items-center justify-center border border-white/10 transition" title="Cerrar">
+        <i class="fa-solid fa-xmark text-sm"></i>
+      </button>
+
+      <!-- Cabecera Panorámica -->
+      <div id="detail-backdrop-container" class="relative w-full h-48 sm:h-64 bg-[#0B0C10] overflow-hidden">
+        <img id="detail-backdrop" src="" class="w-full h-full object-cover opacity-60" alt="Backdrop">
+        <div class="absolute inset-0 bg-gradient-to-t from-[#13151D] via-[#13151D]/40 to-transparent"></div>
+        <div class="absolute bottom-4 left-4 right-4 flex items-end gap-4">
+          <img id="detail-poster" src="" class="w-20 sm:w-28 aspect-[2/3] object-cover rounded-xl border border-white/10 shadow-2xl shrink-0 hidden sm:block">
+          <div class="space-y-1">
+            <div id="detail-badges" class="flex flex-wrap gap-1.5 mb-1"></div>
+            <h2 id="detail-title" class="text-xl sm:text-2xl font-extrabold text-white leading-tight">Título</h2>
+            <p id="detail-subtitle" class="text-xs text-zinc-300 font-medium">Año • Tipo • Plataforma</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cuerpo del Detalle -->
+      <div class="p-5 space-y-4 max-h-[60vh] overflow-y-auto">
+        <div>
+          <h4 class="text-xs font-bold uppercase tracking-wider text-zinc-400 mb-1">Sinopsis</h4>
+          <p id="detail-overview" class="text-xs sm:text-sm text-zinc-200 leading-relaxed">Cargando sinopsis y detalles desde TMDB...</p>
+        </div>
+
+        <!-- Desglose de Temporadas en Quick View -->
+        <div id="detail-seasons-section" class="hidden space-y-2 bg-[#0B0C10] border border-white/5 p-3.5 rounded-xl">
+          <h4 class="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
+            <i class="fa-solid fa-layer-group"></i> Desglose de Temporadas
+          </h4>
+          <div id="detail-seasons-list" class="space-y-1.5 pt-1"></div>
+        </div>
+
+        <div id="detail-user-record" class="bg-[#0B0C10] border border-white/5 p-3.5 rounded-xl space-y-2">
+          <!-- Estado en el Catálogo Personal -->
+        </div>
+      </div>
+
+      <!-- Pie del Modal -->
+      <div class="bg-[#0B0C10]/80 border-t border-white/5 p-4 flex items-center justify-between">
+        <button onclick="closeModal('modal-detail')" class="px-4 py-2 text-xs text-zinc-400 hover:text-white transition">Cerrar</button>
+        <div id="detail-action-btn-container">
+          <!-- Botón dinámico (Editar o Agregar a Catálogo) -->
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- MODAL: REGISTRAR / EDITAR -->
-  <div id="modal-register" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md p-6 space-y-4">
+  <div id="modal-register" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-[#13151D] border border-white/5 rounded-2xl w-full max-w-lg p-6 space-y-4 max-h-[90vh] overflow-y-auto shadow-2xl">
       <h3 class="text-lg font-bold text-white flex items-center gap-2">
-        <i class="fa-solid fa-square-plus dynamic-text"></i> Registrar en CineLog
+        <i class="fa-solid fa-square-plus text-amber-400"></i> Registrar en CineLog
       </h3>
       <form id="form-item" onsubmit="saveItem(event)" class="space-y-3">
-        <div>
-          <label class="block text-xs font-semibold text-slate-400 mb-1">Título</label>
-          <input type="text" id="inp-title" required class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none" placeholder="ej. Interstellar o Jujutsu Kaisen">
+        <div class="flex gap-3 items-end">
+          <div class="flex-1 relative">
+            <label class="block text-xs font-semibold text-zinc-400 mb-1">Título</label>
+            <div class="relative">
+              <input type="text" id="inp-title" required autocomplete="off" class="w-full bg-[#0B0C10] border border-white/5 rounded-xl px-3 py-2 text-sm focus:border-amber-500 focus:outline-none text-zinc-100" placeholder="ej. Interstellar o Jujutsu Kaisen" oninput="handleTypeaheadInput(event)">
+              <button type="button" onclick="searchTMDBManual()" class="absolute right-2.5 top-2.5 text-zinc-500 hover:text-white transition" title="Buscar en TMDB">
+                <i class="fa-solid fa-magnifying-glass"></i>
+              </button>
+            </div>
+            <!-- Menú flotante de Autocompletado en vivo (Typeahead) -->
+            <div id="typeahead-dropdown" class="hidden absolute left-0 right-0 top-full mt-1 bg-[#0B0C10] border border-white/5 rounded-xl shadow-2xl z-50 max-h-60 overflow-y-auto divide-y divide-white/5"></div>
+          </div>
+          <div id="poster-preview-container" class="hidden shrink-0">
+            <img id="poster-preview" src="" class="h-20 w-14 object-cover rounded-xl border border-white/10 shadow-lg">
+          </div>
         </div>
+
+        <div id="tmdb-results" class="hidden space-y-2 max-h-40 overflow-y-auto bg-[#0B0C10] border border-white/5 rounded-xl p-2"></div>
 
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block text-xs font-semibold text-slate-400 mb-1">Tipo</label>
-            <select id="inp-type" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none">
+            <label class="block text-xs font-semibold text-zinc-400 mb-1">Tipo</label>
+            <select id="inp-type" onchange="toggleSeasonsFields()" class="w-full bg-[#0B0C10] border border-white/5 rounded-xl px-3 py-2 text-sm focus:border-amber-500 focus:outline-none text-zinc-100">
               <option value="Película">Película</option>
               <option value="Serie">Serie</option>
               <option value="Anime">Anime</option>
             </select>
           </div>
           <div>
-            <label class="block text-xs font-semibold text-slate-400 mb-1">Estado</label>
-            <select id="inp-status" onchange="toggleRatingField()" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none">
+            <label class="block text-xs font-semibold text-zinc-400 mb-1">Estado</label>
+            <select id="inp-status" onchange="toggleRatingField()" class="w-full bg-[#0B0C10] border border-white/5 rounded-xl px-3 py-2 text-sm focus:border-amber-500 focus:outline-none text-zinc-100">
               <option value="Visto">Visto</option>
               <option value="Watchlist">Por Ver (Watchlist)</option>
             </select>
@@ -189,64 +400,158 @@
 
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block text-xs font-semibold text-slate-400 mb-1">Plataforma</label>
-            <select id="inp-platform" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none">
+            <label class="block text-xs font-semibold text-zinc-400 mb-1">Plataforma</label>
+            <select id="inp-platform" class="w-full bg-[#0B0C10] border border-white/5 rounded-xl px-3 py-2 text-sm focus:border-amber-500 focus:outline-none text-zinc-100">
               <option value="Netflix">Netflix</option>
               <option value="Max">Max</option>
               <option value="Prime Video">Prime Video</option>
               <option value="Crunchyroll">Crunchyroll</option>
               <option value="Disney+">Disney+</option>
-              <option value="DGO">DirectTV Go</option>
+              <option value="DGO">DGO (DirecTV Go)</option>
               <option value="Cine">Cine / Otro</option>
             </select>
           </div>
           <div id="wrap-rating">
-            <label class="block text-xs font-semibold text-slate-400 mb-1">Calificación (1 al 10)</label>
-            <input type="number" step="0.1" min="1" max="10" id="inp-rating" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none" placeholder="ej. 9.7">
+            <label class="block text-xs font-semibold text-zinc-400 mb-1">Calificación General (1 al 10)</label>
+            <input type="number" step="0.1" min="1" max="10" id="inp-rating" class="w-full bg-[#0B0C10] border border-white/5 rounded-xl px-3 py-2 text-sm focus:border-amber-500 focus:outline-none text-amber-400 font-bold" placeholder="ej. 9.7">
           </div>
         </div>
 
-        <div>
-          <label class="block text-xs font-semibold text-slate-400 mb-1">Director / Estudio / Creador</label>
-          <input type="text" id="inp-creator" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none" placeholder="ej. Denis Villeneuve o MAPPA">
+        <!-- Sección de Calificación por Temporadas (Series y Anime) -->
+        <div id="seasons-config-section" class="hidden space-y-2 bg-[#0B0C10] border border-white/5 p-3.5 rounded-xl">
+          <div class="flex items-center justify-between">
+            <label class="text-xs font-bold text-amber-400 flex items-center gap-1.5">
+              <i class="fa-solid fa-layer-group"></i> Calificación por Temporadas
+            </label>
+            <div class="flex items-center gap-2">
+              <span class="text-[11px] text-zinc-400">Total Temp:</span>
+              <input type="number" id="inp-total-seasons" min="1" max="30" value="1" onchange="rebuildSeasonsRows()" class="w-14 bg-[#13151D] border border-white/5 rounded-lg px-2 py-1 text-xs text-center font-bold text-white focus:outline-none focus:border-amber-500">
+            </div>
+          </div>
+          <div id="seasons-rows-container" class="space-y-2 max-h-40 overflow-y-auto pr-1">
+            <!-- Fichas de temporadas -->
+          </div>
+          <p class="text-[10px] text-zinc-500">La calificación general de la serie se calcula automáticamente como el promedio de sus temporadas.</p>
         </div>
 
         <div>
-          <label class="block text-xs font-semibold text-slate-400 mb-1">Reseña o Comentario Breve</label>
-          <textarea id="inp-review" rows="2" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none" placeholder="Lo que más te atrapó o lo que menos te gustó..."></textarea>
+          <label class="block text-xs font-semibold text-zinc-400 mb-1">Director / Estudio / Creador</label>
+          <input type="text" id="inp-creator" class="w-full bg-[#0B0C10] border border-white/5 rounded-xl px-3 py-2 text-sm focus:border-amber-500 focus:outline-none text-zinc-100" placeholder="ej. Denis Villeneuve o MAPPA">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-zinc-400 mb-1">Categorías / Géneros (separados por comas)</label>
+          <input type="text" id="inp-genres" class="w-full bg-[#0B0C10] border border-white/5 rounded-xl px-3 py-2 text-sm focus:border-amber-500 focus:outline-none text-zinc-100" placeholder="ej. Ciencia ficción, Acción, Drama">
+          <p class="text-[10px] text-zinc-500 mt-0.5">Se autocompletan desde TMDB o puedes escribirlos libremente.</p>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-zinc-400 mb-1">Reseña o Comentario Breve</label>
+          <textarea id="inp-review" rows="2" class="w-full bg-[#0B0C10] border border-white/5 rounded-xl px-3 py-2 text-sm focus:border-amber-500 focus:outline-none text-zinc-100" placeholder="Lo que más te atrapó o lo que menos te gustó..."></textarea>
+        </div>
+
+        <div class="space-y-1">
+          <button type="button" onclick="document.getElementById('manual-poster-wrap').classList.toggle('hidden')" class="text-[10px] text-zinc-500 hover:text-zinc-300 transition flex items-center gap-1">
+            <i class="fa-solid fa-image"></i> URL de imagen manual (opcional)
+          </button>
+          <div id="manual-poster-wrap" class="hidden">
+            <input type="text" id="inp-poster" class="w-full bg-[#0B0C10] border border-white/5 rounded-xl px-3 py-1.5 text-[11px] focus:border-amber-500 focus:outline-none text-zinc-200" placeholder="https://ejemplo.com/poster.jpg">
+          </div>
         </div>
 
         <div class="flex justify-end gap-2 pt-2">
-          <button type="button" onclick="closeModal('modal-register')" class="px-4 py-2 text-xs text-slate-400 hover:text-white">Cancelar</button>
-          <button type="submit" class="dynamic-bg dynamic-bg-hover text-white text-xs font-semibold px-4 py-2 rounded-lg">Guardar</button>
+          <button type="button" onclick="closeModal('modal-register')" class="px-4 py-2 text-xs text-zinc-400 hover:text-white">Cancelar</button>
+          <button type="submit" class="py-2 px-4 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-semibold text-xs transition shadow-lg shadow-amber-500/20">Guardar</button>
         </div>
       </form>
     </div>
   </div>
 
+  <!-- MODAL: RULETA SORPRÉNDEME / QUÉ VER HOY -->
+  <div id="modal-roulette" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-[#13151D] border border-white/5 rounded-2xl w-full max-w-md p-6 space-y-5 text-center shadow-2xl relative animate-in fade-in zoom-in duration-200">
+      <button onclick="closeModal('modal-roulette')" class="absolute top-3 right-3 text-zinc-400 hover:text-white w-7 h-7 rounded-full flex items-center justify-center bg-[#0B0C10] border border-white/5 transition">
+        <i class="fa-solid fa-xmark text-xs"></i>
+      </button>
+
+      <div class="space-y-2">
+        <div class="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center mx-auto text-amber-400 text-xl">
+          <i class="fa-solid fa-dice animate-spin"></i>
+        </div>
+        <h3 class="text-lg font-extrabold text-white">¿Qué ver hoy? (Ruleta de Pendientes)</h3>
+        <p class="text-xs text-zinc-400">Seleccionado aleatoriamente de tu Watchlist respetando tus plataformas activas.</p>
+      </div>
+
+      <div id="roulette-result-card" class="bg-[#0B0C10] border border-white/5 rounded-xl p-4 space-y-3 text-left">
+        <!-- Tarjeta del resultado aleatorio -->
+      </div>
+
+      <div class="flex gap-2 justify-center pt-1">
+        <button onclick="spinRoulette()" class="bg-[#13151D] hover:bg-white/5 border border-white/5 text-zinc-200 text-xs font-semibold px-4 py-2.5 rounded-xl transition flex items-center gap-2">
+          <i class="fa-solid fa-rotate"></i> Girar de nuevo
+        </button>
+        <button id="roulette-action-btn" class="py-2.5 px-4 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-semibold text-xs transition flex items-center gap-2 shadow-lg shadow-amber-500/20">
+          <i class="fa-solid fa-eye"></i> Ver detalles
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- MODAL: ADMINISTRACIÓN TOTAL -->
-  <div id="modal-settings" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-xl p-6 space-y-5 max-h-[90vh] overflow-y-auto">
+  <div id="modal-settings" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-[#13151D] border border-white/5 rounded-2xl w-full max-w-xl p-6 space-y-5 max-h-[90vh] overflow-y-auto shadow-2xl">
       <h3 class="text-lg font-bold text-white flex items-center gap-2">
-        <i class="fa-solid fa-sliders dynamic-text"></i> Panel de Administración y Ajustes
+        <i class="fa-solid fa-sliders text-amber-400"></i> Panel de Administración y Ajustes
       </h3>
 
-      <!-- 1. Ajustes Visuales en Vivo -->
-      <div class="space-y-2 pb-4 border-b border-slate-800">
-        <label class="block text-xs font-semibold text-slate-300">🎨 Personalización Visual de la Aplicación</label>
+      <!-- 1. Mis Suscripciones (Plataformas de Streaming) -->
+      <div class="space-y-2.5 pb-4 border-b border-white/5">
+        <label class="block text-xs font-semibold text-zinc-300">📺 Mis Suscripciones (Plataformas de Streaming Activas)</label>
+        <p class="text-[11px] text-zinc-400">Selecciona las plataformas que tienes contratadas. Esto guiará las recomendaciones de la IA y el filtrado.</p>
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5 pt-1">
+          <label class="flex items-center gap-2 bg-[#0B0C10] border border-white/5 p-2.5 rounded-xl cursor-pointer hover:border-amber-500/30 transition">
+            <input type="checkbox" id="plat-netflix" value="Netflix" class="accent-amber-500 w-4 h-4 rounded">
+            <span class="text-xs font-medium text-white">Netflix</span>
+          </label>
+          <label class="flex items-center gap-2 bg-[#0B0C10] border border-white/5 p-2.5 rounded-xl cursor-pointer hover:border-amber-500/30 transition">
+            <input type="checkbox" id="plat-max" value="Max" class="accent-amber-500 w-4 h-4 rounded">
+            <span class="text-xs font-medium text-white">Max (HBO Max)</span>
+          </label>
+          <label class="flex items-center gap-2 bg-[#0B0C10] border border-white/5 p-2.5 rounded-xl cursor-pointer hover:border-amber-500/30 transition">
+            <input type="checkbox" id="plat-prime" value="Prime Video" class="accent-amber-500 w-4 h-4 rounded">
+            <span class="text-xs font-medium text-white">Prime Video</span>
+          </label>
+          <label class="flex items-center gap-2 bg-[#0B0C10] border border-white/5 p-2.5 rounded-xl cursor-pointer hover:border-amber-500/30 transition">
+            <input type="checkbox" id="plat-dgo" value="DGO" class="accent-amber-500 w-4 h-4 rounded">
+            <span class="text-xs font-medium text-white">DGO (DirecTV Go)</span>
+          </label>
+          <label class="flex items-center gap-2 bg-[#0B0C10] border border-white/5 p-2.5 rounded-xl cursor-pointer hover:border-amber-500/30 transition">
+            <input type="checkbox" id="plat-crunchyroll" value="Crunchyroll" class="accent-amber-500 w-4 h-4 rounded">
+            <span class="text-xs font-medium text-white">Crunchyroll <span class="text-[10px] text-amber-400 font-semibold">(Anime)</span></span>
+          </label>
+          <label class="flex items-center gap-2 bg-[#0B0C10] border border-white/5 p-2.5 rounded-xl cursor-pointer hover:border-amber-500/30 transition">
+            <input type="checkbox" id="plat-disney" value="Disney+" class="accent-amber-500 w-4 h-4 rounded">
+            <span class="text-xs font-medium text-white">Disney+</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- 2. Ajustes Visuales en Vivo -->
+      <div class="space-y-2 pb-4 border-b border-white/5">
+        <label class="block text-xs font-semibold text-zinc-300">🎨 Personalización Visual de la Aplicación</label>
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <span class="text-[11px] text-slate-400 block mb-1">Color de Acento:</span>
-            <select id="inp-theme-color" onchange="applyVisualTheme()" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-200">
-              <option value="theme-indigo">Índigo CineLog (Por defecto)</option>
+            <span class="text-[11px] text-zinc-400 block mb-1">Color de Acento:</span>
+            <select id="inp-theme-color" onchange="applyVisualTheme()" class="w-full bg-[#0B0C10] border border-white/5 rounded-xl px-2.5 py-1.5 text-xs text-zinc-200">
+              <option value="theme-indigo">Dorado Obsidian (Por defecto)</option>
               <option value="theme-red">Rojo Streaming (Estilo Netflix)</option>
               <option value="theme-emerald">Esmeralda Neón</option>
               <option value="theme-purple">Violeta Cyberpunk</option>
             </select>
           </div>
           <div>
-            <span class="text-[11px] text-slate-400 block mb-1">Diseño de Catálogo:</span>
-            <select id="inp-layout-density" onchange="applyVisualTheme()" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-2.5 py-1.5 text-xs text-slate-200">
+            <span class="text-[11px] text-zinc-400 block mb-1">Diseño de Catálogo:</span>
+            <select id="inp-layout-density" onchange="applyVisualTheme()" class="w-full bg-[#0B0C10] border border-white/5 rounded-xl px-2.5 py-1.5 text-xs text-zinc-200">
               <option value="grid">Cuadrícula de Tarjetas</option>
               <option value="list">Lista Compacta</option>
             </select>
@@ -254,116 +559,255 @@
         </div>
       </div>
 
-      <!-- 2. API Key -->
-      <div class="space-y-1.5 pb-4 border-b border-slate-800">
-        <label class="block text-xs font-semibold text-slate-300">Gemini API Key</label>
-        <input type="password" id="inp-apikey" class="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-xs focus:border-indigo-500 focus:outline-none font-mono" placeholder="AQ... o AIzaSy...">
-        <p class="text-[11px] text-slate-500">Clave de Google AI Studio. Permanece en tu navegador sin compartirse.</p>
+      <!-- 3. API Keys -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pb-4 border-b border-white/5">
+        <div class="space-y-1.5">
+          <label class="block text-xs font-semibold text-zinc-300">Gemini API Key</label>
+          <input type="password" id="inp-apikey" class="w-full bg-[#0B0C10] border border-white/5 rounded-xl px-3 py-2 text-xs focus:border-amber-500 focus:outline-none font-mono text-zinc-200" placeholder="AQ... or AIzaSy...">
+          <p class="text-[10px] text-zinc-500">Google AI Studio.</p>
+        </div>
+        <div class="space-y-1.5">
+          <label class="block text-xs font-semibold text-zinc-300">TMDB API Key</label>
+          <input type="password" id="inp-tmdb-apikey" class="w-full bg-[#0B0C10] border border-white/5 rounded-xl px-3 py-2 text-xs focus:border-amber-500 focus:outline-none font-mono text-zinc-200" placeholder="v4 auth or v3 key...">
+          <p class="text-[10px] text-zinc-500">The Movie Database API.</p>
+        </div>
       </div>
 
-      <!-- 3. Asistente con IA para Reglas y System Prompt -->
-      <div class="space-y-2 pb-4 border-b border-slate-800">
+      <!-- 4. Asistente con IA para Reglas y System Prompt -->
+      <div class="space-y-2 pb-4 border-b border-white/5">
         <div class="flex items-center justify-between">
-          <label class="block text-xs font-semibold text-slate-300">Instrucciones Maestras de la IA (System Prompt)</label>
-          <button type="button" onclick="resetDefaultPrompt()" class="text-[11px] dynamic-text hover:underline">Restablecer base</button>
+          <label class="block text-xs font-semibold text-zinc-300">Instrucciones Maestras de la IA (System Prompt)</label>
+          <button type="button" onclick="resetDefaultPrompt()" class="text-[11px] text-amber-400 hover:underline">Restablecer base</button>
         </div>
 
         <!-- Asistente de Optimización de Reglas -->
-        <div class="bg-slate-950/80 p-3 rounded-xl border border-slate-800 space-y-2">
-          <span class="text-[11px] text-indigo-400 font-semibold flex items-center gap-1.5">
+        <div class="bg-[#0B0C10] p-3 rounded-xl border border-white/5 space-y-2">
+          <span class="text-[11px] text-amber-400 font-semibold flex items-center gap-1.5">
             <i class="fa-solid fa-wand-magic-sparkles"></i> Optimizar o redactar reglas con IA:
           </span>
           <div class="flex gap-2">
-            <input type="text" id="inp-ai-prompt-instruction" placeholder="ej. Prioriza anime en Crunchyroll y sé sarcástico con películas malas..." class="flex-1 bg-slate-900 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-200 focus:outline-none">
-            <button type="button" onclick="generateRulesWithAI()" id="btn-generate-rules" class="dynamic-bg dynamic-bg-hover text-white text-xs px-3 py-1.5 rounded-lg flex items-center gap-1">
+            <input type="text" id="inp-ai-prompt-instruction" placeholder="ej. Prioriza anime en Crunchyroll y sé sarcástico con películas malas..." class="flex-1 bg-[#13151D] border border-white/5 rounded-xl px-3 py-1.5 text-xs text-zinc-200 focus:outline-none">
+            <button type="button" onclick="generateRulesWithAI()" id="btn-generate-rules" class="py-1.5 px-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-semibold text-xs transition flex items-center gap-1 shadow-lg shadow-amber-500/20">
               <span>Optimizar</span>
             </button>
           </div>
         </div>
 
-        <textarea id="inp-system-prompt" rows="6" class="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-xs font-mono text-slate-300 focus:border-indigo-500 focus:outline-none leading-relaxed"></textarea>
+        <textarea id="inp-system-prompt" rows="6" class="w-full bg-[#0B0C10] border border-white/5 rounded-xl p-3 text-xs font-mono text-zinc-300 focus:border-amber-500 focus:outline-none leading-relaxed"></textarea>
       </div>
 
-      <!-- 4. Respaldo de Base de Datos -->
-      <div class="space-y-2">
-        <label class="block text-xs font-semibold text-slate-300">Respaldo y Portabilidad</label>
-        <div class="flex gap-2">
-          <button type="button" onclick="exportJSONBackup()" class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs py-2 rounded-lg border border-slate-700 flex items-center justify-center gap-2">
-            <i class="fa-solid fa-download"></i> Descargar Copia (JSON)
+      <!-- 5. Respaldo de Base de Datos y Herramientas (Importar/Exportar JSON y CSV) -->
+      <div class="space-y-2.5">
+        <label class="block text-xs font-semibold text-zinc-300">Respaldo, Restauración y Exportación</label>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+          <button type="button" onclick="exportJSONBackup()" class="bg-[#0B0C10] hover:bg-white/5 text-zinc-300 text-xs py-2 px-3 rounded-xl border border-white/5 flex items-center justify-center gap-1.5 transition">
+            <i class="fa-solid fa-download"></i> Exportar (JSON)
           </button>
-          <label class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs py-2 rounded-lg border border-slate-700 flex items-center justify-center gap-2 cursor-pointer">
-            <i class="fa-solid fa-upload"></i> Restaurar Copia
+          <label class="bg-[#0B0C10] hover:bg-white/5 text-zinc-300 text-xs py-2 px-3 rounded-xl border border-white/5 flex items-center justify-center gap-1.5 cursor-pointer transition">
+            <i class="fa-solid fa-upload"></i> Importar Respaldo
             <input type="file" id="file-import" accept=".json" onchange="importJSONBackup(event)" class="hidden">
           </label>
+          <button type="button" onclick="exportCSV()" class="bg-[#0B0C10] hover:bg-white/5 text-zinc-300 text-xs py-2 px-3 rounded-xl border border-white/5 flex items-center justify-center gap-1.5 transition">
+            <i class="fa-solid fa-file-csv"></i> Exportar a CSV
+          </button>
         </div>
       </div>
 
       <div class="flex justify-end gap-2 pt-2">
-        <button type="button" onclick="closeModal('modal-settings')" class="px-4 py-2 text-xs text-slate-400 hover:text-white">Cancelar</button>
-        <button type="button" onclick="saveSettings()" class="dynamic-bg dynamic-bg-hover text-white text-xs font-semibold px-4 py-2 rounded-lg">Guardar Ajustes</button>
+        <button type="button" onclick="closeModal('modal-settings')" class="px-4 py-2 text-xs text-zinc-400 hover:text-white">Cancelar</button>
+        <button type="button" onclick="saveSettings()" class="py-2 px-4 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-semibold text-xs transition shadow-lg shadow-amber-500/20">Guardar Ajustes</button>
       </div>
     </div>
   </div>
 
   <script>
     const DEFAULT_SYSTEM_PROMPT = `Eres "CineLog", curador audiovisual personal y experto en cine, series y anime.
-Plataformas activas del usuario: Netflix, Max, Prime Video, DGO, Crunchyroll y Disney+.
 
-Reglas de respuesta:
-1. Recomienda títulos disponibles prioritariamente en sus plataformas e indica claramente en cuál verlos.
-2. CERO spoilers: no desveles giros ni desenlaces bajo ninguna circunstancia.
-3. Conexión de afinidad: Analiza el historial del usuario con notas 8.0 a 10 para identificar ritmos, atmósferas y directores afines.
-4. Límite de opciones: Máximo 3 a 5 sugerencias claras y concisas para no saturar.
-5. Si el usuario te pide recomendaciones, incluye siempre: Título, Plataforma, Por qué le gustará y Tono/Duración.`;
+Instrucciones obligatorias para cada recomendación:
+1. "Dónde ver": Nombre exacto de la plataforma de la lista del usuario donde está disponible (prioriza Crunchyroll o Netflix si se trata de anime).
+2. CERO spoilers: No desveles giros ni desenlaces bajo ninguna circunstancia.
+3. Formato y género: Indica claramente si es Película, Serie o Anime y sus géneros principales.
+4. Justificación personalizada: Basada en los gustos e historial del usuario en su catálogo (notas altas >= 8/10).
+5. Límite de opciones: Máximo 3 a 5 sugerencias claras y concisas.`;
 
-    let items = JSON.parse(localStorage.getItem('cinelog_items')) || [];
-    let chatHistory = JSON.parse(localStorage.getItem('cinelog_chat_history')) || [];
+    const TMDB_GENRES_MAP = {
+      28: 'Acción',
+      12: 'Aventura',
+      16: 'Animación',
+      35: 'Comedia',
+      80: 'Crimen',
+      99: 'Documental',
+      18: 'Drama',
+      10751: 'Familiar',
+      14: 'Fantasía',
+      36: 'Historia',
+      27: 'Terror',
+      10402: 'Música',
+      9648: 'Misterio',
+      10749: 'Romance',
+      878: 'Ciencia ficción',
+      10770: 'Película de TV',
+      53: 'Suspenso',
+      10752: 'Bélica',
+      37: 'Western',
+      10759: 'Acción y Aventura',
+      1628: 'Animación',
+      10762: 'Kids',
+      10763: 'News',
+      10764: 'Reality',
+      10765: 'Ciencia ficción y Fantasía',
+      10766: 'Soap',
+      10767: 'Talk',
+      10768: 'Guerra y Política'
+    };
+
+    let items = [];
+    let chatHistory = [];
     let currentFilter = 'all';
+    let currentGenreFilter = 'all';
+    let currentTrendingFilter = 'all';
+    let typeaheadTimer = null;
+    let activePlatforms = ['Netflix', 'Max', 'Prime Video', 'DGO', 'Crunchyroll', 'Disney+'];
+
+    try {
+      items = JSON.parse(localStorage.getItem('cinelog_items')) || [];
+      chatHistory = JSON.parse(localStorage.getItem('cinelog_chat_history')) || [];
+      const savedPlatforms = JSON.parse(localStorage.getItem('cinelog_platforms'));
+      if (Array.isArray(savedPlatforms)) {
+        activePlatforms = savedPlatforms;
+      }
+    } catch (error) {
+      items = [];
+      chatHistory = [];
+      activePlatforms = ['Netflix', 'Max', 'Prime Video', 'DGO', 'Crunchyroll', 'Disney+'];
+      localStorage.removeItem('cinelog_items');
+      localStorage.removeItem('cinelog_chat_history');
+      localStorage.removeItem('cinelog_platforms');
+    }
+
+    function escapeHtml(value = '') {
+      return String(value)
+        .replace(/&/g, '&')
+        .replace(/</g, '<')
+        .replace(/>/g, '>')
+        .replace(/\"/g, '"')
+        .replace(/'/g, '&#039;');
+    }
+
+    function extractTextFromGeminiResponse(data) {
+      if (!data || !Array.isArray(data.candidates) || data.candidates.length === 0) return '';
+      const candidate = data.candidates[0];
+      if (!candidate || !candidate.content || !Array.isArray(candidate.content.parts) || candidate.content.parts.length === 0) return '';
+
+      const text = candidate.content.parts
+        .map(part => (part && typeof part.text === 'string') ? part.text : '')
+        .join('');
+
+      return text.trim();
+    }
 
     function init() {
       loadVisualSettings();
+      renderGenreFiltersBar();
       renderCatalog();
       updateStats();
       renderChatMessages();
+
+      document.addEventListener('click', (e) => {
+        const dropdown = document.getElementById('typeahead-dropdown');
+        const titleInput = document.getElementById('inp-title');
+        if (dropdown && titleInput && !titleInput.contains(e.target) && !dropdown.contains(e.target)) {
+          dropdown.classList.add('hidden');
+        }
+      });
     }
 
-    // AJUSTES VISUALES
     function loadVisualSettings() {
       const savedTheme = localStorage.getItem('cinelog_theme') || 'theme-indigo';
       const savedLayout = localStorage.getItem('cinelog_layout') || 'grid';
       
-      document.body.className = `bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans ${savedTheme}`;
+      document.body.className = `bg-[#0B0C10] text-zinc-100 min-h-screen flex flex-col font-['Plus_Jakarta_Sans',sans-serif] antialiased tracking-tight ${savedTheme}`;
       document.getElementById('inp-theme-color').value = savedTheme;
       document.getElementById('inp-layout-density').value = savedLayout;
+
+      updateLayoutButtonsUI(savedLayout);
+
+      const checkboxes = ['netflix', 'max', 'prime', 'dgo', 'crunchyroll', 'disney'];
+      checkboxes.forEach(id => {
+        const cb = document.getElementById(`plat-${id}`);
+        if (cb) {
+          cb.checked = activePlatforms.includes(cb.value);
+        }
+      });
     }
 
     function applyVisualTheme() {
       const selectedTheme = document.getElementById('inp-theme-color').value;
       const selectedLayout = document.getElementById('inp-layout-density').value;
       
-      document.body.className = `bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans ${selectedTheme}`;
+      document.body.className = `bg-[#0B0C10] text-zinc-100 min-h-screen flex flex-col font-['Plus_Jakarta_Sans',sans-serif] antialiased tracking-tight ${selectedTheme}`;
       localStorage.setItem('cinelog_theme', selectedTheme);
       localStorage.setItem('cinelog_layout', selectedLayout);
+      updateLayoutButtonsUI(selectedLayout);
       renderCatalog();
     }
 
-    // NAVEGACIÓN
+    function setLayoutMode(mode) {
+      localStorage.setItem('cinelog_layout', mode);
+      document.getElementById('inp-layout-density').value = mode;
+      updateLayoutButtonsUI(mode);
+      renderCatalog();
+    }
+
+    function updateLayoutButtonsUI(mode) {
+      const btnGrid = document.getElementById('layout-btn-grid');
+      const btnList = document.getElementById('layout-btn-list');
+      if (!btnGrid || !btnList) return;
+
+      if (mode === 'list') {
+        btnGrid.className = 'px-3 py-1.5 rounded-lg text-zinc-400 hover:text-white transition';
+        btnList.className = 'px-3 py-1.5 rounded-lg bg-amber-500 text-black font-semibold transition';
+      } else {
+        btnGrid.className = 'px-3 py-1.5 rounded-lg bg-amber-500 text-black font-semibold transition';
+        btnList.className = 'px-3 py-1.5 rounded-lg text-zinc-400 hover:text-white transition';
+      }
+    }
+
     function switchView(view) {
       const viewCatalog = document.getElementById('view-catalog');
+      const viewProfile = document.getElementById('view-profile');
+      const viewTrending = document.getElementById('view-trending');
       const viewChat = document.getElementById('view-chat');
+      
       const btnCatalog = document.getElementById('nav-btn-catalog');
+      const btnProfile = document.getElementById('nav-btn-profile');
+      const btnTrending = document.getElementById('nav-btn-trending');
       const btnChat = document.getElementById('nav-btn-chat');
+
+      viewCatalog.classList.add('hidden');
+      viewProfile.classList.add('hidden');
+      viewTrending.classList.add('hidden');
+      viewChat.classList.add('hidden');
+
+      btnCatalog.className = 'px-3 py-1.5 rounded-xl text-zinc-400 hover:text-white transition flex items-center gap-1.5';
+      btnProfile.className = 'px-3 py-1.5 rounded-xl text-zinc-400 hover:text-white transition flex items-center gap-1.5';
+      btnTrending.className = 'px-3 py-1.5 rounded-xl text-zinc-400 hover:text-white transition flex items-center gap-1.5';
+      btnChat.className = 'px-3 py-1.5 rounded-xl text-zinc-400 hover:text-white transition flex items-center gap-1.5';
 
       if (view === 'catalog') {
         viewCatalog.classList.remove('hidden');
-        viewChat.classList.add('hidden');
-        btnCatalog.className = 'px-3 py-1.5 rounded-lg dynamic-bg text-white transition flex items-center gap-1.5';
-        btnChat.className = 'px-3 py-1.5 rounded-lg text-slate-400 hover:text-white transition flex items-center gap-1.5';
-      } else {
-        viewCatalog.classList.add('hidden');
+        btnCatalog.className = 'px-4 py-1.5 bg-amber-500 text-black font-semibold shadow-lg shadow-amber-500/20 rounded-xl transition flex items-center gap-1.5';
+      } else if (view === 'profile') {
+        viewProfile.classList.remove('hidden');
+        btnProfile.className = 'px-4 py-1.5 bg-amber-500 text-black font-semibold shadow-lg shadow-amber-500/20 rounded-xl transition flex items-center gap-1.5';
+        renderProfileAnalytics();
+      } else if (view === 'trending') {
+        viewTrending.classList.remove('hidden');
+        btnTrending.className = 'px-4 py-1.5 bg-amber-500 text-black font-semibold shadow-lg shadow-amber-500/20 rounded-xl transition flex items-center gap-1.5';
+        loadTrending();
+      } else if (view === 'chat') {
         viewChat.classList.remove('hidden');
-        btnChat.className = 'px-3 py-1.5 rounded-lg dynamic-bg text-white transition flex items-center gap-1.5';
-        btnCatalog.className = 'px-3 py-1.5 rounded-lg text-slate-400 hover:text-white transition flex items-center gap-1.5';
+        btnChat.className = 'px-4 py-1.5 bg-amber-500 text-black font-semibold shadow-lg shadow-amber-500/20 rounded-xl transition flex items-center gap-1.5';
         scrollChatToBottom();
       }
     }
@@ -373,41 +817,416 @@ Reglas de respuesta:
       document.getElementById('wrap-rating').style.display = status === 'Watchlist' ? 'none' : 'block';
     }
 
+    function toggleSeasonsFields() {
+      const type = document.getElementById('inp-type').value;
+      const section = document.getElementById('seasons-config-section');
+      if (type === 'Serie' || type === 'Anime') {
+        section.classList.remove('hidden');
+      } else {
+        section.classList.add('hidden');
+      }
+    }
+
+    function rebuildSeasonsRows(existingSeasons = []) {
+      const totalInput = document.getElementById('inp-total-seasons');
+      const count = parseInt(totalInput.value) || 1;
+      const container = document.getElementById('seasons-rows-container');
+      container.innerHTML = '';
+
+      for (let i = 1; i <= count; i++) {
+        const existingSeason = existingSeasons[i - 1] || { rating: 10, status: 'Visto' };
+        const row = document.createElement('div');
+        row.className = 'bg-[#13151D] border border-white/5 p-2.5 rounded-xl flex items-center justify-between gap-3';
+        row.innerHTML = `
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-bold text-white w-20">Temporada ${i}</span>
+            <select class="season-status-inp bg-[#0B0C10] border border-white/5 rounded-lg px-2 py-1 text-xs text-zinc-200 focus:outline-none">
+              <option value="Visto" ${existingSeason.status === 'Visto' ? 'selected' : ''}>Visto</option>
+              <option value="Pendiente" ${existingSeason.status === 'Pendiente' ? 'selected' : ''}>Pendiente</option>
+            </select>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <span class="text-[10px] text-zinc-400">Nota:</span>
+            <input type="number" step="0.1" min="1" max="10" value="${existingSeason.rating !== undefined ? existingSeason.rating : 10}" class="season-rating-inp w-16 bg-[#0B0C10] border border-white/5 rounded-lg px-2 py-1 text-xs text-amber-400 font-bold text-center focus:outline-none" oninput="calculateSeriesAverageRating()">
+          </div>
+        `;
+        container.appendChild(row);
+      }
+      calculateSeriesAverageRating();
+    }
+
+    function calculateSeriesAverageRating() {
+      const type = document.getElementById('inp-type').value;
+      if (type !== 'Serie' && type !== 'Anime') return;
+
+      const ratingInputs = document.querySelectorAll('.season-rating-inp');
+      const statusInputs = document.querySelectorAll('.season-status-inp');
+      let sum = 0;
+      let count = 0;
+
+      ratingInputs.forEach((inp, idx) => {
+        const status = statusInputs[idx] ? statusInputs[idx].value : 'Visto';
+        if (status === 'Visto') {
+          const val = parseFloat(inp.value) || 0;
+          sum += val;
+          count++;
+        }
+      });
+
+      if (count > 0) {
+        const avg = (sum / count).toFixed(1);
+        document.getElementById('inp-rating').value = avg;
+      }
+    }
+
+    // VISTA "MI PERFIL" CON ANÁLISIS POR PLATAFORMA
+    function renderProfileAnalytics() {
+      const vistos = items.filter(i => i.status === 'Visto');
+      const watchlist = items.filter(i => i.status === 'Watchlist');
+      const peliculas = items.filter(i => i.type === 'Película');
+      const series = items.filter(i => i.type === 'Serie');
+      const animes = items.filter(i => i.type === 'Anime');
+
+      let avgGlobal = 0;
+      if (vistos.length > 0) {
+        const sum = vistos.reduce((acc, curr) => acc + (curr.rating || 0), 0);
+        avgGlobal = (sum / vistos.length).toFixed(1);
+      }
+
+      // Plataforma más registrada
+      const platformCounts = {};
+      items.forEach(i => {
+        if (i.platform) {
+          platformCounts[i.platform] = (platformCounts[i.platform] || 0) + 1;
+        }
+      });
+      let topPlatform = 'N/A';
+      let maxPlatCount = 0;
+      Object.keys(platformCounts).forEach(p => {
+        if (platformCounts[p] > maxPlatCount) {
+          maxPlatCount = platformCounts[p];
+          topPlatform = p;
+        }
+      });
+
+      // 1. KPIs
+      const kpisContainer = document.getElementById('profile-kpis');
+      kpisContainer.innerHTML = `
+        <div class="bg-[#13151D] border border-white/5 p-4 rounded-2xl shadow-xl">
+          <p class="text-xs text-zinc-400 font-medium">Total de Obras</p>
+          <p class="text-3xl font-black text-white mt-1">${items.length}</p>
+          <p class="text-[10px] text-zinc-500 mt-1">${vistos.length} vistos • ${watchlist.length} watchlist</p>
+        </div>
+        <div class="bg-[#13151D] border border-white/5 p-4 rounded-2xl shadow-xl">
+          <p class="text-xs text-zinc-400 font-medium">Desglose por Tipo</p>
+          <div class="text-xs font-bold text-zinc-200 mt-1 space-y-0.5">
+            <p>🎬 Películas: <span class="text-blue-400">${peliculas.length}</span></p>
+            <p>📺 Series: <span class="text-purple-400">${series.length}</span></p>
+            <p>⛩️ Anime: <span class="text-orange-400">${animes.length}</span></p>
+          </div>
+        </div>
+        <div class="bg-[#13151D] border border-white/5 p-4 rounded-2xl shadow-xl">
+          <p class="text-xs text-zinc-400 font-medium">Promedio Global Calificación</p>
+          <p class="text-3xl font-black text-amber-400 mt-1">${avgGlobal}</p>
+          <p class="text-[10px] text-zinc-500 mt-1">Escala de 1.0 a 10.0</p>
+        </div>
+        <div class="bg-[#13151D] border border-white/5 p-4 rounded-2xl shadow-xl">
+          <p class="text-xs text-zinc-400 font-medium">Plataforma Favorita</p>
+          <p class="text-xl font-black text-amber-400 mt-1 truncate" title="${topPlatform}">${topPlatform}</p>
+          <p class="text-[10px] text-zinc-500 mt-1">${maxPlatCount} registros asociados</p>
+        </div>
+      `;
+
+      // 2. Análisis por Plataforma (Requisito 3)
+      // Recopilar todas las plataformas activas o presentes en items
+      const platformsSet = new Set([...activePlatforms]);
+      items.forEach(i => { if(i.platform) platformsSet.add(i.platform); });
+      const allPlatformsList = Array.from(platformsSet);
+
+      const platformStats = [];
+      allPlatformsList.forEach(plat => {
+        const platItems = items.filter(i => i.platform === plat);
+        const platVistos = platItems.filter(i => i.status === 'Visto' && i.rating !== null && i.rating !== undefined);
+        
+        let avgRating = 0;
+        if (platVistos.length > 0) {
+          const sum = platVistos.reduce((acc, curr) => acc + (curr.rating || 0), 0);
+          avgRating = sum / platVistos.length;
+        }
+
+        // Distribución de notas para barra segmentada
+        // - % Obras Maestras (9.0 - 10.0) en color verde esmeralda (bg-emerald-500)
+        // - % Buenas / Recomendadas (7.0 - 8.9) en color dorado/ámbar (bg-amber-400)
+        // - % Regulares / Bajas (< 7.0) en color gris/zinc (bg-zinc-600)
+        let masterpieces = 0;
+        let good = 0;
+        let regularOrLow = 0;
+
+        platVistos.forEach(i => {
+          const r = i.rating || 0;
+          if (r >= 9.0) masterpieces++;
+          else if (r >= 7.0) good++;
+          else regularOrLow++;
+        });
+
+        const totalV = platVistos.length;
+        const pctMasterpieces = totalV > 0 ? Math.round((masterpieces / totalV) * 100) : 0;
+        const pctGood = totalV > 0 ? Math.round((good / totalV) * 100) : 0;
+        const pctRegular = totalV > 0 ? Math.max(0, 100 - pctMasterpieces - pctGood) : 0;
+
+        platformStats.push({
+          name: plat,
+          total: platItems.length,
+          vistosCount: totalV,
+          avg: totalV > 0 ? avgRating.toFixed(1) : '0.0',
+          avgRaw: avgRating,
+          pctMasterpieces,
+          pctGood,
+          pctRegular
+        });
+      });
+
+      // Ordenar por promedio de calificación para hallar la "Plataforma Mejor Valorada"
+      platformStats.sort((a, b) => b.avgRaw - a.avgRaw);
+      const bestPlatform = platformStats.find(p => p.vistosCount > 0) || platformStats[0];
+
+      const bestPlatformBadgeEl = document.getElementById('best-platform-badge');
+      if (bestPlatform && bestPlatform.vistosCount > 0) {
+        bestPlatformBadgeEl.innerHTML = `
+          <i class="fa-solid fa-crown text-amber-400"></i>
+          <span>Plataforma Mejor Valorada: <strong>${escapeHtml(bestPlatform.name)}</strong> (★ ${bestPlatform.avg})</span>
+        `;
+        bestPlatformBadgeEl.classList.remove('hidden');
+      } else {
+        bestPlatformBadgeEl.innerHTML = `<i class="fa-solid fa-info-circle text-amber-400"></i><span>Aún sin calificaciones registradas</span>`;
+      }
+
+      const platformsGrid = document.getElementById('platforms-analytics-grid');
+      platformsGrid.innerHTML = '';
+
+      platformStats.forEach(p => {
+        const isBest = bestPlatform && bestPlatform.name === p.name && p.vistosCount > 0;
+        const card = document.createElement('div');
+        card.className = `bg-[#181A24] border ${isBest ? 'border-amber-500/40 shadow-amber-500/10' : 'border-white/5'} rounded-xl p-4 space-y-3 shadow-xl relative overflow-hidden`;
+        
+        if (isBest) {
+          card.innerHTML += `<div class="absolute top-0 right-0 bg-amber-500 text-black text-[9px] font-extrabold px-2 py-0.5 rounded-bl-lg uppercase tracking-wider">Top Valorada</div>`;
+        }
+
+        card.innerHTML += `
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-bold text-white bg-black/40 border border-white/10 px-2.5 py-1 rounded-lg">${escapeHtml(p.name)}</span>
+            </div>
+            <span class="text-xs font-black text-amber-400 flex items-center gap-1">
+              <i class="fa-solid fa-star text-[10px]"></i> ${p.avg}
+            </span>
+          </div>
+
+          <div class="flex justify-between text-[11px] text-zinc-400 pt-1">
+            <span>Total Títulos: <strong class="text-white">${p.total}</strong></span>
+            <span>Vistos con nota: <strong class="text-white">${p.vistosCount}</strong></span>
+          </div>
+
+          <!-- Barra segmentada de distribución de notas -->
+          <div class="space-y-1 pt-1">
+            <div class="flex justify-between text-[10px] text-zinc-400 font-medium">
+              <span>Distribución de Notas</span>
+              <span class="text-emerald-400">${p.pctMasterpieces}% Top</span>
+            </div>
+            <div class="w-full bg-black/60 rounded-full h-2.5 overflow-hidden flex border border-white/5">
+              <div class="bg-emerald-500 h-2.5 transition-all duration-500" style="width: ${p.pctMasterpieces}%" title="Obras Maestras (9.0 - 10)"></div>
+              <div class="bg-amber-400 h-2.5 transition-all duration-500" style="width: ${p.pctGood}%" title="Buenas / Recomendadas (7.0 - 8.9)"></div>
+              <div class="bg-zinc-600 h-2.5 transition-all duration-500" style="width: ${p.pctRegular}%" title="Regulares / Bajas (< 7.0)"></div>
+            </div>
+            <div class="flex items-center justify-between text-[9px] text-zinc-500 pt-0.5">
+              <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> 9-10 (${p.pctMasterpieces}%)</span>
+              <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span> 7-8.9 (${p.pctGood}%)</span>
+              <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-zinc-600"></span> <7 (${p.pctRegular}%)</span>
+            </div>
+          </div>
+        `;
+        platformsGrid.appendChild(card);
+      });
+
+      // 3. Gráfico de Barras de Géneros
+      const genresChartContainer = document.getElementById('profile-genres-chart');
+      const genreCounts = {};
+      let totalGenreMentions = 0;
+      items.forEach(i => {
+        if (Array.isArray(i.genres)) {
+          i.genres.forEach(g => {
+            if (g && g.trim()) {
+              const cleanG = g.trim();
+              genreCounts[cleanG] = (genreCounts[cleanG] || 0) + 1;
+              totalGenreMentions++;
+            }
+          });
+        }
+      });
+
+      const sortedGenres = Object.keys(genreCounts).sort((a, b) => genreCounts[b] - genreCounts[a]).slice(0, 6);
+      if (sortedGenres.length === 0) {
+        genresChartContainer.innerHTML = '<p class="text-xs text-zinc-500 py-6 text-center">Aún no hay géneros registrados en el catálogo.</p>';
+      } else {
+        genresChartContainer.innerHTML = '';
+        sortedGenres.forEach(g => {
+          const count = genreCounts[g];
+          const pct = totalGenreMentions > 0 ? Math.round((count / totalGenreMentions) * 100) : 0;
+          const row = document.createElement('div');
+          row.className = 'space-y-1';
+          row.innerHTML = `
+            <div class="flex justify-between text-xs font-semibold">
+              <span class="text-white">${escapeHtml(g)}</span>
+              <span class="text-zinc-400">${count} obras (${pct}%)</span>
+            </div>
+            <div class="w-full bg-[#0B0C10] rounded-full h-2.5 overflow-hidden border border-white/5">
+              <div class="bg-amber-500 h-2.5 rounded-full transition-all duration-500" style="width: ${pct}%"></div>
+            </div>
+          `;
+          genresChartContainer.appendChild(row);
+        });
+      }
+
+      // 4. Histograma de Calificaciones
+      const histogramContainer = document.getElementById('profile-histogram-chart');
+      const ranges = {
+        masterpieces: { label: '9.0 - 10 (Obras Maestras)', count: 0, color: 'bg-emerald-500' },
+        veryGood: { label: '7.0 - 8.9 (Muy Buenas)', count: 0, color: 'bg-amber-400' },
+        regular: { label: '5.0 - 6.9 (Regulares)', count: 0, color: 'bg-amber-600' },
+        bad: { label: '< 5.0 (Malas)', count: 0, color: 'bg-zinc-600' }
+      };
+
+      vistos.forEach(i => {
+        const r = i.rating || 0;
+        if (r >= 9.0) ranges.masterpieces.count++;
+        else if (r >= 7.0) ranges.veryGood.count++;
+        else if (r >= 5.0) ranges.regular.count++;
+        else ranges.bad.count++;
+      });
+
+      histogramContainer.innerHTML = '';
+      Object.keys(ranges).forEach(key => {
+        const itemRange = ranges[key];
+        const pct = vistos.length > 0 ? Math.round((itemRange.count / vistos.length) * 100) : 0;
+        const row = document.createElement('div');
+        row.className = 'space-y-1';
+        row.innerHTML = `
+          <div class="flex justify-between text-xs font-semibold">
+            <span class="text-white">${itemRange.label}</span>
+            <span class="text-zinc-400">${itemRange.count} (${pct}%)</span>
+          </div>
+          <div class="w-full bg-[#0B0C10] rounded-full h-2.5 overflow-hidden border border-white/5">
+            <div class="${itemRange.color} h-2.5 rounded-full transition-all duration-500" style="width: ${pct}%"></div>
+          </div>
+        `;
+        histogramContainer.appendChild(row);
+      });
+
+      // 5. Suscripciones Activas
+      const subsContainer = document.getElementById('profile-subscriptions-list');
+      subsContainer.innerHTML = activePlatforms.map(p => `
+        <span class="text-xs bg-[#0B0C10] border border-white/5 text-white font-semibold px-3.5 py-1.5 rounded-xl flex items-center gap-1.5 shadow">
+          <i class="fa-solid fa-check text-amber-400 text-[10px]"></i> ${escapeHtml(p)}
+        </span>
+      `).join('');
+    }
+
     function setFilter(filter) {
       currentFilter = filter;
       document.querySelectorAll('.filter-btn').forEach(btn => {
         if(btn.dataset.filter === filter) {
-          btn.className = 'filter-btn active dynamic-bg text-white text-xs px-3 py-1.5 rounded-lg';
+          btn.className = 'filter-btn active bg-amber-500 text-black font-semibold shadow-lg shadow-amber-500/20 text-xs px-3.5 py-1.5 rounded-xl transition';
         } else {
-          btn.className = 'filter-btn bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs px-3 py-1.5 rounded-lg';
+          btn.className = 'filter-btn bg-[#13151D] hover:bg-white/5 text-zinc-300 border border-white/5 text-xs px-3.5 py-1.5 rounded-xl transition';
         }
       });
       renderCatalog();
     }
 
+    function setGenreFilter(genre) {
+      currentGenreFilter = genre;
+      document.querySelectorAll('.genre-filter-btn').forEach(btn => {
+        if(btn.dataset.genre === genre) {
+          btn.className = 'genre-filter-btn px-3 py-1 rounded-lg bg-amber-500 text-black font-semibold shrink-0 transition';
+        } else {
+          btn.className = 'genre-filter-btn px-3 py-1 rounded-lg bg-[#13151D] hover:bg-white/5 text-zinc-300 shrink-0 border border-white/5 transition';
+        }
+      });
+      renderCatalog();
+    }
+
+    function getAllUniqueGenres() {
+      const genresSet = new Set();
+      items.forEach(it => {
+        if (Array.isArray(it.genres)) {
+          it.genres.forEach(g => { if(g && g.trim()) genresSet.add(g.trim()); });
+        }
+      });
+      return Array.from(genresSet).sort();
+    }
+
+    function renderGenreFiltersBar() {
+      const bar = document.getElementById('genre-filters-bar');
+      if (!bar) return;
+
+      const uniqueGenres = getAllUniqueGenres();
+      bar.innerHTML = `
+        <span class="text-[11px] text-zinc-400 font-semibold shrink-0 mr-1"><i class="fa-solid fa-tags text-amber-400"></i> Género:</span>
+        <button onclick="setGenreFilter('all')" class="genre-filter-btn px-3 py-1 rounded-lg ${currentGenreFilter === 'all' ? 'bg-amber-500 text-black font-semibold' : 'bg-[#13151D] hover:bg-white/5 text-zinc-300 border border-white/5'} shrink-0 transition" data-genre="all">Todos</button>
+      `;
+
+      uniqueGenres.forEach(g => {
+        const isActive = currentGenreFilter === g;
+        const btn = document.createElement('button');
+        btn.onclick = () => setGenreFilter(g);
+        btn.className = `genre-filter-btn px-3 py-1 rounded-lg ${isActive ? 'bg-amber-500 text-black font-semibold' : 'bg-[#13151D] hover:bg-white/5 text-zinc-300 border border-white/5'} shrink-0 transition`;
+        btn.dataset.genre = g;
+        btn.textContent = g;
+        bar.appendChild(btn);
+      });
+    }
+
     function renderCatalog() {
+      renderGenreFiltersBar();
       const container = document.getElementById('catalog');
       const empty = document.getElementById('empty-state');
       const searchQuery = (document.getElementById('inp-search')?.value || '').toLowerCase();
+      const sortOrder = document.getElementById('inp-sort')?.value || 'newest';
       const layout = localStorage.getItem('cinelog_layout') || 'grid';
 
       container.className = layout === 'list' 
-        ? 'flex flex-col gap-2' 
-        : 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4';
+        ? 'flex flex-col gap-2.5' 
+        : 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5';
 
       container.innerHTML = '';
 
-      const filtered = items.filter(it => {
+      let filtered = items.filter(it => {
+        const safeTitle = String(it.title || '').toLowerCase();
+        const safeCreator = String(it.creator || '').toLowerCase();
+        const safeReview = String(it.review || '').toLowerCase();
+
         const matchesFilter = currentFilter === 'all' 
           ? it.status !== 'Watchlist' 
           : (currentFilter === 'Watchlist' ? it.status === 'Watchlist' : it.type === currentFilter && it.status !== 'Watchlist');
         
-        const matchesSearch = !searchQuery || 
-          it.title.toLowerCase().includes(searchQuery) || 
-          (it.creator && it.creator.toLowerCase().includes(searchQuery)) ||
-          (it.review && it.review.toLowerCase().includes(searchQuery));
+        const matchesGenre = currentGenreFilter === 'all' || (Array.isArray(it.genres) && it.genres.some(g => g.toLowerCase() === currentGenreFilter.toLowerCase()));
 
-        return matchesFilter && matchesSearch;
+        const matchesSearch = !searchQuery || 
+          safeTitle.includes(searchQuery) || 
+          safeCreator.includes(searchQuery) ||
+          safeReview.includes(searchQuery);
+
+        return matchesFilter && matchesGenre && matchesSearch;
+      });
+
+      filtered.sort((a, b) => {
+        if (sortOrder === 'rating-desc') return (b.rating || 0) - (a.rating || 0);
+        if (sortOrder === 'rating-asc') return (a.rating || 0) - (b.rating || 0);
+        if (sortOrder === 'title-asc') return (a.title || '').localeCompare(b.title || '');
+        if (sortOrder === 'title-desc') return (b.title || '').localeCompare(a.title || '');
+        if (sortOrder === 'oldest') return new Date(a.date || 0) - new Date(b.date || 0);
+        return new Date(b.date || 0) - new Date(a.date || 0);
       });
 
       if (filtered.length === 0) {
@@ -421,46 +1240,85 @@ Reglas de respuesta:
         const badgeColor = it.type === 'Anime' ? 'bg-orange-500/20 text-orange-400 border-orange-500/30' : 
                            it.type === 'Serie' ? 'bg-purple-500/20 text-purple-400 border-purple-500/30' : 
                            'bg-blue-500/20 text-blue-400 border-blue-500/30';
+        const safeTitle = escapeHtml(it.title || 'Sin título');
+        const safeCreator = escapeHtml(it.creator || 'N/A');
+        const safePlatform = escapeHtml(it.platform || 'N/A');
+        const safeReview = escapeHtml(it.review || '');
+
+        const genresList = Array.isArray(it.genres) ? it.genres : [];
+        const genresHtml = genresList.map(g => `<span class="text-[10px] bg-black/60 text-zinc-300 px-2.5 py-0.5 rounded-md border border-white/10">${escapeHtml(g)}</span>`).join('');
 
         if (layout === 'list') {
-          card.className = 'bg-slate-900 border border-slate-800 hover:border-slate-700 rounded-xl px-4 py-2.5 flex items-center justify-between gap-4 transition';
+          card.className = 'bg-[#13151D] border border-white/5 hover:border-amber-500/30 rounded-2xl px-4 py-3 flex items-center justify-between gap-4 transition cursor-pointer hover:shadow-xl group';
           card.innerHTML = `
-            <div class="flex items-center gap-3 min-w-0 flex-1">
-              <span class="text-[10px] font-bold px-2 py-0.5 rounded border ${badgeColor}">${it.type}</span>
+            <div class="flex items-center gap-3.5 min-w-0 flex-1 card-clickable">
+              ${it.poster ? `
+                <img src="${escapeHtml(it.poster)}" class="w-11 h-16 object-cover rounded-xl shrink-0 border border-white/10">
+              ` : `
+                <div class="w-11 h-16 rounded-xl bg-[#0B0C10] border border-white/10 flex items-center justify-center shrink-0">
+                  <i class="fa-solid fa-film text-xs text-zinc-600"></i>
+                </div>
+              `}
+              <span class="bg-black/60 backdrop-blur-md text-zinc-300 border border-white/10 px-2 py-0.5 rounded-md text-[11px] font-medium">${escapeHtml(it.type)}</span>
               <div class="truncate">
-                <span class="font-bold text-white text-sm mr-2">${it.title}</span>
-                <span class="text-xs text-slate-400">${it.creator || 'N/A'} • ${it.platform}</span>
+                <div class="flex items-center gap-2">
+                  <span class="font-bold text-white text-sm group-hover:text-amber-400 transition">${safeTitle}</span>
+                  <div class="hidden sm:flex items-center gap-1">${genresHtml}</div>
+                </div>
+                <span class="text-xs text-zinc-400">${safeCreator} • ${safePlatform} ${Array.isArray(it.seasons) && it.seasons.length ? `• ${it.seasons.length} Temp.` : ''}</span>
               </div>
             </div>
             <div class="flex items-center gap-3 shrink-0">
               ${it.status === 'Visto' ? `
-                <span class="text-xs font-black text-amber-400 flex items-center gap-1">
+                <span class="bg-black/75 backdrop-blur-md text-amber-400 border border-amber-500/20 px-2 py-0.5 rounded-md text-xs font-semibold flex items-center gap-1">
                   <i class="fa-solid fa-star text-[10px]"></i> ${Number(it.rating).toFixed(1)}
                 </span>
-              ` : `<span class="text-[10px] bg-slate-800 text-slate-400 px-2 py-0.5 rounded">Pendiente</span>`}
-              <button onclick="deleteItem('${it.id}')" class="text-slate-500 hover:text-red-400 text-xs transition"><i class="fa-solid fa-trash"></i></button>
+              ` : `<span class="text-[10px] bg-black/60 text-zinc-300 px-2 py-0.5 rounded-md border border-white/10">Pendiente</span>`}
+              <button onclick="event.stopPropagation(); deleteItem('${it.id}')" class="text-zinc-500 hover:text-rose-400 text-xs transition"><i class="fa-solid fa-trash"></i></button>
             </div>
           `;
+          card.querySelector('.card-clickable').onclick = () => openDetailModal(it);
         } else {
-          card.className = 'bg-slate-900 border border-slate-800 hover:border-slate-700 rounded-xl p-4 flex flex-col justify-between space-y-3 transition';
+          card.className = 'bg-[#13151D] border border-white/5 rounded-2xl hover:border-amber-500/30 transition-all duration-300 shadow-xl overflow-hidden flex flex-col justify-between group cursor-pointer';
           card.innerHTML = `
-            <div>
-              <div class="flex items-start justify-between gap-2 mb-1">
-                <span class="text-[10px] font-bold px-2 py-0.5 rounded border ${badgeColor}">${it.type}</span>
-                ${it.status === 'Visto' ? `
-                  <span class="text-sm font-black text-amber-400 flex items-center gap-1">
-                    <i class="fa-solid fa-star text-xs"></i> ${Number(it.rating).toFixed(1)}
+            <div class="card-clickable">
+              <div class="relative w-full aspect-[2/3] bg-[#0B0C10] overflow-hidden">
+                ${it.poster ? `
+                  <img src="${escapeHtml(it.poster)}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" alt="${safeTitle}">
+                ` : `
+                  <div class="w-full h-full bg-[#0B0C10] flex flex-col items-center justify-center text-zinc-600 space-y-2 p-4 text-center">
+                    <i class="fa-solid fa-film text-3xl opacity-40"></i>
+                    <span class="text-[10px] uppercase tracking-wider font-semibold opacity-50">Sin Portada</span>
+                  </div>
+                `}
+                <div class="absolute inset-0 bg-gradient-to-t from-[#0B0C10] via-transparent to-transparent opacity-0 group-hover:opacity-90 transition-opacity flex items-end p-4">
+                  <span class="text-xs font-semibold text-black bg-amber-500 backdrop-blur-md px-3 py-1.5 rounded-xl flex items-center gap-1.5 shadow-lg">
+                    <i class="fa-solid fa-eye"></i> Ver detalles
                   </span>
-                ` : `<span class="text-[10px] bg-slate-800 text-slate-400 px-2 py-0.5 rounded">Pendiente</span>`}
+                </div>
+                <div class="absolute top-2.5 left-2.5">
+                  <span class="bg-black/60 backdrop-blur-md text-zinc-300 border border-white/10 px-2 py-0.5 rounded-md text-[11px] font-medium">${escapeHtml(it.type)}</span>
+                </div>
+                <div class="absolute top-2.5 right-2.5">
+                  ${it.status === 'Visto' ? `
+                    <span class="bg-black/75 backdrop-blur-md text-amber-400 border border-amber-500/20 px-2 py-0.5 rounded-md text-xs font-semibold flex items-center gap-1 shadow">
+                      <i class="fa-solid fa-star text-[10px]"></i> ${Number(it.rating).toFixed(1)}
+                    </span>
+                  ` : `<span class="bg-black/60 backdrop-blur-md text-zinc-300 border border-white/10 px-2 py-0.5 rounded-md text-[11px] font-medium">Pendiente</span>`}
+                </div>
               </div>
-              <h4 class="font-bold text-white text-base leading-snug">${it.title}</h4>
-              <p class="text-xs text-slate-400 mt-0.5">${it.creator || 'Sin director/estudio'} • <span class="text-slate-300">${it.platform}</span></p>
-              ${it.review ? `<p class="text-xs text-slate-300 mt-2 bg-slate-950/60 p-2 rounded-lg italic border border-slate-800/60">"${it.review}"</p>` : ''}
+              <div class="p-4 space-y-2.5">
+                <h4 class="font-bold text-white text-base leading-snug truncate group-hover:text-amber-400 transition" title="${safeTitle}">${safeTitle}</h4>
+                <p class="text-xs text-zinc-400">${safeCreator || 'Sin director/estudio'} • <span class="text-zinc-200 font-medium">${safePlatform}</span> ${Array.isArray(it.seasons) && it.seasons.length ? `• ${it.seasons.length} Temp.` : ''}</p>
+                <div class="flex flex-wrap gap-1.5 pt-0.5">${genresHtml}</div>
+                ${it.review ? `<p class="text-xs text-zinc-300 bg-[#0B0C10] p-2.5 rounded-xl italic border border-white/5 line-clamp-2">"${safeReview}"</p>` : ''}
+              </div>
             </div>
-            <div class="flex justify-end gap-2 pt-2 border-t border-slate-800/50">
-              <button onclick="deleteItem('${it.id}')" class="text-slate-500 hover:text-red-400 text-xs transition" title="Eliminar"><i class="fa-solid fa-trash"></i></button>
+            <div class="px-4 pb-4 flex justify-end gap-2 pt-2 border-t border-white/5">
+              <button onclick="event.stopPropagation(); deleteItem('${it.id}')" class="text-zinc-500 hover:text-rose-400 text-xs transition" title="Eliminar"><i class="fa-solid fa-trash"></i></button>
             </div>
           `;
+          card.querySelector('.card-clickable').onclick = () => openDetailModal(it);
         }
         container.appendChild(card);
       });
@@ -469,21 +1327,42 @@ Reglas de respuesta:
     function saveItem(e) {
       e.preventDefault();
       const status = document.getElementById('inp-status').value;
+      const type = document.getElementById('inp-type').value;
+      const rawGenres = document.getElementById('inp-genres').value;
+      const genresArray = rawGenres ? rawGenres.split(',').map(g => g.trim()).filter(Boolean) : [];
+
+      let seasonsArray = [];
+      if (type === 'Serie' || type === 'Anime') {
+        const ratingInputs = document.querySelectorAll('.season-rating-inp');
+        const statusInputs = document.querySelectorAll('.season-status-inp');
+        ratingInputs.forEach((inp, idx) => {
+          seasonsArray.push({
+            seasonNumber: idx + 1,
+            status: statusInputs[idx] ? statusInputs[idx].value : 'Visto',
+            rating: parseFloat(inp.value) || 10
+          });
+        });
+      }
+
       const newItem = {
         id: Date.now().toString(),
         title: document.getElementById('inp-title').value.trim(),
-        type: document.getElementById('inp-type').value,
+        type: type,
         status: status,
         platform: document.getElementById('inp-platform').value,
         rating: status === 'Visto' ? parseFloat(document.getElementById('inp-rating').value) || 0 : null,
         creator: document.getElementById('inp-creator').value.trim(),
+        genres: genresArray,
+        seasons: seasonsArray,
         review: document.getElementById('inp-review').value.trim(),
+        poster: document.getElementById('inp-poster').value.trim(),
         date: new Date().toISOString()
       };
 
       items.unshift(newItem);
       localStorage.setItem('cinelog_items', JSON.stringify(items));
       closeModal('modal-register');
+      closeModal('modal-detail');
       document.getElementById('form-item').reset();
       renderCatalog();
       updateStats();
@@ -514,14 +1393,521 @@ Reglas de respuesta:
       }
     }
 
-    // MODALES Y CONFIGURACIÓN
-    function openRegisterModal() { document.getElementById('modal-register').classList.remove('hidden'); }
+    function openRouletteModal() {
+      const modal = document.getElementById('modal-roulette');
+      modal.classList.remove('hidden');
+      spinRoulette();
+    }
+
+    function spinRoulette() {
+      let candidatePool = items.filter(i => i.status === 'Watchlist' && activePlatforms.includes(i.platform));
+      
+      if (candidatePool.length === 0) {
+        candidatePool = items.filter(i => (i.rating || 0) >= 8.5 && activePlatforms.includes(i.platform));
+      }
+      
+      if (candidatePool.length === 0) {
+        candidatePool = items;
+      }
+
+      const resultContainer = document.getElementById('roulette-result-card');
+      const actionBtn = document.getElementById('roulette-action-btn');
+
+      if (candidatePool.length === 0) {
+        resultContainer.innerHTML = `
+          <div class="text-center py-6 space-y-2 text-zinc-400">
+            <i class="fa-solid fa-film text-2xl text-amber-500"></i>
+            <p class="text-xs">No hay elementos en tu Watchlist ni obras calificadas con nota alta en tus plataformas activas.</p>
+          </div>
+        `;
+        actionBtn.onclick = () => closeModal('modal-roulette');
+        return;
+      }
+
+      const chosen = candidatePool[Math.floor(Math.random() * candidatePool.length)];
+      const safeTitle = escapeHtml(chosen.title || 'Título');
+
+      resultContainer.innerHTML = `
+        <div class="flex gap-3 items-center">
+          ${chosen.poster ? `<img src="${escapeHtml(chosen.poster)}" class="w-14 h-20 object-cover rounded-xl border border-white/10 shrink-0">` : `<div class="w-14 h-20 bg-[#13151D] rounded-xl flex items-center justify-center shrink-0"><i class="fa-solid fa-film text-zinc-600"></i></div>`}
+          <div class="space-y-1 min-w-0">
+            <span class="bg-black/60 backdrop-blur-md text-zinc-300 border border-white/10 px-2 py-0.5 rounded-md text-[11px] font-medium">${escapeHtml(chosen.type)}</span>
+            <h4 class="text-sm font-bold text-white truncate">${safeTitle}</h4>
+            <p class="text-xs text-zinc-400">${escapeHtml(chosen.platform)} • ${chosen.status === 'Visto' ? `★ ${chosen.rating}/10` : 'Pendiente'}</p>
+            ${chosen.creator ? `<p class="text-[11px] text-zinc-500 truncate">${escapeHtml(chosen.creator)}</p>` : ''}
+          </div>
+        </div>
+        ${chosen.review ? `<p class="text-xs text-zinc-300 italic bg-[#13151D] p-2.5 rounded-xl border border-white/5 line-clamp-2">"${escapeHtml(chosen.review)}"</p>` : ''}
+      `;
+
+      actionBtn.onclick = () => {
+        closeModal('modal-roulette');
+        openDetailModal(chosen);
+      };
+    }
+
+    function openRegisterModal(prefill = null) { 
+      document.getElementById('modal-register').classList.remove('hidden'); 
+      document.getElementById('tmdb-results').classList.add('hidden');
+      document.getElementById('typeahead-dropdown').classList.add('hidden');
+
+      if (prefill) {
+        document.getElementById('inp-title').value = prefill.title || '';
+        document.getElementById('inp-type').value = prefill.type || 'Película';
+        document.getElementById('inp-status').value = prefill.status || 'Visto';
+        document.getElementById('inp-poster').value = prefill.poster || '';
+        document.getElementById('inp-creator').value = prefill.creator || '';
+        document.getElementById('inp-genres').value = Array.isArray(prefill.genres) ? prefill.genres.join(', ') : (prefill.genres || '');
+        document.getElementById('inp-review').value = '';
+        document.getElementById('inp-rating').value = prefill.rating || '';
+        
+        toggleRatingField();
+        toggleSeasonsFields();
+
+        if (Array.isArray(prefill.seasons) && prefill.seasons.length > 0) {
+          document.getElementById('inp-total-seasons').value = prefill.seasons.length;
+          rebuildSeasonsRows(prefill.seasons);
+        } else {
+          document.getElementById('inp-total-seasons').value = 1;
+          rebuildSeasonsRows();
+        }
+
+        if (prefill.poster) {
+          const preview = document.getElementById('poster-preview');
+          preview.src = prefill.poster;
+          document.getElementById('poster-preview-container').classList.remove('hidden');
+        } else {
+          document.getElementById('poster-preview-container').classList.add('hidden');
+        }
+      } else {
+        document.getElementById('form-item').reset();
+        document.getElementById('poster-preview-container').classList.add('hidden');
+        document.getElementById('inp-total-seasons').value = 1;
+        toggleRatingField();
+        toggleSeasonsFields();
+        rebuildSeasonsRows();
+      }
+    }
+
+    async function openDetailModal(itemData) {
+      const modal = document.getElementById('modal-detail');
+      const content = document.getElementById('modal-detail-content');
+      modal.classList.remove('hidden');
+      
+      setTimeout(() => {
+        content.classList.remove('scale-95', 'opacity-0');
+        content.classList.add('scale-100', 'opacity-100');
+      }, 10);
+
+      const titleEl = document.getElementById('detail-title');
+      const subtitleEl = document.getElementById('detail-subtitle');
+      const overviewEl = document.getElementById('detail-overview');
+      const posterEl = document.getElementById('detail-poster');
+      const backdropEl = document.getElementById('detail-backdrop');
+      const badgesEl = document.getElementById('detail-badges');
+      const userRecordEl = document.getElementById('detail-user-record');
+      const actionContainer = document.getElementById('detail-action-btn-container');
+      const seasonsSection = document.getElementById('detail-seasons-section');
+      const seasonsList = document.getElementById('detail-seasons-list');
+
+      titleEl.textContent = itemData.title || 'Sin título';
+      subtitleEl.textContent = `${itemData.creator || 'Estreno'} • ${itemData.type} • ${itemData.platform || 'Streaming'}`;
+      overviewEl.textContent = itemData.overview || 'Cargando sinopsis oficial desde TMDB...';
+      
+      if (itemData.poster) {
+        posterEl.src = itemData.poster;
+        posterEl.classList.remove('hidden');
+        backdropEl.src = itemData.backdrop || itemData.poster;
+      } else {
+        posterEl.classList.add('hidden');
+        backdropEl.src = '';
+      }
+
+      const genres = Array.isArray(itemData.genres) ? itemData.genres : [];
+      badgesEl.innerHTML = genres.map(g => `<span class="bg-black/60 backdrop-blur-md text-zinc-300 border border-white/10 px-2.5 py-0.5 rounded-md text-[11px] font-medium">${escapeHtml(g)}</span>`).join('');
+
+      if (Array.isArray(itemData.seasons) && itemData.seasons.length > 0) {
+        seasonsSection.classList.remove('hidden');
+        seasonsList.innerHTML = itemData.seasons.map(s => `
+          <div class="flex items-center justify-between bg-[#13151D] border border-white/5 px-3.5 py-2 rounded-xl text-xs">
+            <span class="font-bold text-white">Temporada ${s.seasonNumber}</span>
+            <div class="flex items-center gap-3">
+              <span class="text-zinc-400">${s.status}</span>
+              <span class="font-black text-amber-400">★ ${s.rating}/10</span>
+            </div>
+          </div>
+        `).join('');
+      } else {
+        seasonsSection.classList.add('hidden');
+      }
+
+      const existingItem = items.find(i => i.title.toLowerCase() === (itemData.title || '').toLowerCase());
+
+      if (existingItem) {
+        userRecordEl.innerHTML = `
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-emerald-400 flex items-center gap-1.5"><i class="fa-solid fa-check-circle"></i> En tu Catálogo Personal</span>
+            <span class="text-xs font-bold text-amber-400">${existingItem.status === 'Visto' ? `★ ${Number(existingItem.rating).toFixed(1)}/10` : 'Pendiente'}</span>
+          </div>
+          <p class="text-xs text-zinc-300">Plataforma: <span class="text-white font-medium">${existingItem.platform}</span> • Estado: <span class="text-white font-medium">${existingItem.status}</span></p>
+          ${existingItem.review ? `<p class="text-xs italic text-zinc-400">"${escapeHtml(existingItem.review)}"</p>` : ''}
+        `;
+        actionContainer.innerHTML = `
+          <button onclick="closeModal('modal-detail'); openRegisterModal(${JSON.stringify(existingItem).replace(/"/g, '"')})" class="bg-[#13151D] hover:bg-white/5 border border-white/5 text-white text-xs font-semibold px-4 py-2 rounded-xl transition flex items-center gap-1.5">
+            <i class="fa-solid fa-pen"></i> Editar Registro
+          </button>
+        `;
+      } else {
+        userRecordEl.innerHTML = `
+          <div class="flex items-center gap-2 text-xs text-zinc-400">
+            <i class="fa-solid fa-circle-info text-amber-400"></i> Este título aún no ha sido registrado en tu CineLog personal.
+          </div>
+        `;
+        actionContainer.innerHTML = `
+          <button onclick="closeModal('modal-detail'); openRegisterModal({ title: '${escapeHtml(itemData.title).replace(/'/g, "\\'")}', type: '${itemData.type}', poster: '${itemData.poster || ''}', creator: '${itemData.creator || ''}', genres: ${JSON.stringify(genres)} })" class="py-2 px-4 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-semibold text-xs transition flex items-center gap-1.5 shadow-lg shadow-amber-500/20">
+            <i class="fa-solid fa-plus"></i> Agregar a mi Catálogo
+          </button>
+        `;
+      }
+
+      const tmdbKey = localStorage.getItem('tmdb_api_key');
+      if (tmdbKey && itemData.title) {
+        try {
+          const searchRes = await fetch(`https://api.themoviedb.org/3/search/multi?api_key=${tmdbKey}&query=${encodeURIComponent(itemData.title)}&language=es-ES`);
+          const searchData = await searchRes.json();
+          if (searchData.results && searchData.results.length > 0) {
+            const match = searchData.results[0];
+            if (match.overview) {
+              overviewEl.textContent = match.overview;
+            }
+            if (match.backdrop_path) {
+              backdropEl.src = `https://image.tmdb.org/t/p/w1280${match.backdrop_path}`;
+            }
+            if (match.poster_path && !itemData.poster) {
+              const pUrl = `https://image.tmdb.org/t/p/w500${match.poster_path}`;
+              posterEl.src = pUrl;
+              posterEl.classList.remove('hidden');
+            }
+          }
+        } catch (e) {}
+      }
+    }
+
+    function handleTypeaheadInput(e) {
+      const query = e.target.value.trim();
+      const dropdown = document.getElementById('typeahead-dropdown');
+
+      if (typeaheadTimer) clearTimeout(typeaheadTimer);
+
+      if (query.length < 2) {
+        dropdown.classList.add('hidden');
+        dropdown.innerHTML = '';
+        return;
+      }
+
+      typeaheadTimer = setTimeout(() => {
+        executeTypeahead(query);
+      }, 300);
+    }
+
+    async function executeTypeahead(query) {
+      const tmdbKey = localStorage.getItem('tmdb_api_key');
+      const dropdown = document.getElementById('typeahead-dropdown');
+
+      if (!tmdbKey) {
+        dropdown.innerHTML = '<div class="p-3 text-xs text-amber-400">Configura tu TMDB API Key en Ajustes.</div>';
+        dropdown.classList.remove('hidden');
+        return;
+      }
+
+      dropdown.innerHTML = '<div class="p-3 text-xs text-zinc-400 flex items-center gap-2"><i class="fa-solid fa-spinner fa-spin"></i> Buscando sugerencias...</div>';
+      dropdown.classList.remove('hidden');
+
+      try {
+        let response = await fetch(`https://api.themoviedb.org/3/search/multi?api_key=${tmdbKey}&query=${encodeURIComponent(query)}&language=es-ES`);
+        let data = await response.json();
+
+        if (!data.results || data.results.length === 0) {
+          response = await fetch(`https://api.themoviedb.org/3/search/multi?api_key=${tmdbKey}&query=${encodeURIComponent(query)}&language=en-US`);
+          data = await response.json();
+        }
+
+        if (!data.results || data.results.length === 0) {
+          dropdown.innerHTML = '<div class="p-3 text-xs text-zinc-500">Sin resultados en TMDB.</div>';
+          return;
+        }
+
+        const results = data.results
+          .filter(r => ['movie', 'tv'].includes(r.media_type))
+          .slice(0, 5);
+
+        if (results.length === 0) {
+          dropdown.innerHTML = '<div class="p-3 text-xs text-zinc-500">Sin películas o series encontradas.</div>';
+          return;
+        }
+
+        dropdown.innerHTML = '';
+        results.forEach(res => {
+          const title = res.title || res.name;
+          const date = res.release_date || res.first_air_date || '';
+          const year = date ? date.substring(0, 4) : 'N/A';
+          const isMovie = res.media_type === 'movie';
+          const isAnime = !isMovie && (res.genre_ids && res.genre_ids.includes(16));
+          const type = isMovie ? 'Película' : (isAnime ? 'Anime' : 'Serie');
+          const poster = res.poster_path ? `https://image.tmdb.org/t/p/w92${res.poster_path}` : '';
+          const hdPoster = res.poster_path ? `https://image.tmdb.org/t/p/w500${res.poster_path}` : '';
+          const backdrop = res.backdrop_path ? `https://image.tmdb.org/t/p/w1280${res.backdrop_path}` : '';
+          
+          const genreNames = (res.genre_ids || [])
+            .map(id => TMDB_GENRES_MAP[id])
+            .filter(Boolean);
+
+          const itemDiv = document.createElement('div');
+          itemDiv.className = 'flex items-center gap-3 p-2.5 hover:bg-white/5 cursor-pointer transition';
+          itemDiv.onclick = () => {
+            selectTypeaheadItem({
+              title: title,
+              year: year,
+              type: type,
+              poster: hdPoster,
+              backdrop: backdrop,
+              overview: res.overview,
+              genres: genreNames
+            });
+          };
+
+          itemDiv.innerHTML = `
+            ${poster ? `<img src="${poster}" class="w-9 h-12 object-cover rounded-xl shadow shrink-0 border border-white/10">` : `<div class="w-9 h-12 bg-[#13151D] flex items-center justify-center rounded-xl shrink-0"><i class="fa-solid fa-film text-xs text-zinc-600"></i></div>`}
+            <div class="min-w-0 flex-1">
+              <p class="text-xs font-bold text-white truncate">${escapeHtml(title)}</p>
+              <p class="text-[10px] text-zinc-400">${year} • <span class="text-amber-400 font-semibold">${type}</span> ${genreNames.length ? '• ' + genreNames.slice(0, 2).join(', ') : ''}</p>
+            </div>
+          `;
+          dropdown.appendChild(itemDiv);
+        });
+      } catch (err) {
+        dropdown.innerHTML = '<div class="p-3 text-xs text-rose-400">Error al consultar TMDB.</div>';
+      }
+    }
+
+    function selectTypeaheadItem(data) {
+      document.getElementById('inp-title').value = data.title;
+      document.getElementById('inp-type').value = data.type;
+      document.getElementById('inp-poster').value = data.poster;
+      if (data.year && data.year !== 'N/A') {
+        const creatorInp = document.getElementById('inp-creator');
+        if (!creatorInp.value) creatorInp.value = data.year;
+      }
+      if (Array.isArray(data.genres) && data.genres.length > 0) {
+        document.getElementById('inp-genres').value = data.genres.join(', ');
+      }
+
+      toggleSeasonsFields();
+
+      if (data.poster) {
+        const preview = document.getElementById('poster-preview');
+        preview.src = data.poster;
+        document.getElementById('poster-preview-container').classList.remove('hidden');
+      } else {
+        document.getElementById('poster-preview-container').classList.add('hidden');
+      }
+
+      document.getElementById('typeahead-dropdown').classList.add('hidden');
+    }
+
+    function searchTMDBManual() {
+      const title = document.getElementById('inp-title').value.trim();
+      if (title.length >= 2) executeTypeahead(title);
+    }
+
+    function setTrendingFilter(filter) {
+      currentTrendingFilter = filter;
+      const btnAll = document.getElementById('trend-filter-all');
+      const btnMovie = document.getElementById('trend-filter-movie');
+      const btnTv = document.getElementById('trend-filter-tv');
+
+      btnAll.className = 'px-3.5 py-1.5 rounded-lg text-zinc-400 hover:text-white transition';
+      btnMovie.className = 'px-3.5 py-1.5 rounded-lg text-zinc-400 hover:text-white transition';
+      btnTv.className = 'px-3.5 py-1.5 rounded-lg text-zinc-400 hover:text-white transition';
+
+      if (filter === 'all') btnAll.className = 'px-3.5 py-1.5 rounded-lg bg-amber-500 text-black font-semibold transition';
+      if (filter === 'movie') btnMovie.className = 'px-3.5 py-1.5 rounded-lg bg-amber-500 text-black font-semibold transition';
+      if (filter === 'tv') btnTv.className = 'px-3.5 py-1.5 rounded-lg bg-amber-500 text-black font-semibold transition';
+
+      loadTrending();
+    }
+
+    async function loadTrending() {
+      const container = document.getElementById('trending-container');
+      const tmdbKey = localStorage.getItem('tmdb_api_key');
+
+      if (!tmdbKey) {
+        container.innerHTML = `
+          <div class="col-span-full py-16 bg-[#13151D] border border-white/5 rounded-2xl text-center space-y-3 p-6 shadow-xl">
+            <i class="fa-solid fa-key text-3xl text-amber-400"></i>
+            <h3 class="text-base font-bold text-white">Clave de TMDB Requerida</h3>
+            <p class="text-xs text-zinc-400 max-w-md mx-auto">Para explorar las tendencias semanales necesitas configurar tu API Key de TMDB en el panel de Ajustes.</p>
+            <button onclick="openSettingsModal()" class="py-2 px-4 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-semibold text-xs transition shadow-lg shadow-amber-500/20">
+              Configurar en Ajustes
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = Array(10).fill(0).map(() => `
+        <div class="bg-[#13151D] border border-white/5 rounded-2xl overflow-hidden animate-pulse flex flex-col">
+          <div class="aspect-[2/3] bg-white/5"></div>
+          <div class="p-4 space-y-2 flex-1">
+            <div class="h-4 bg-white/5 rounded w-3/4"></div>
+            <div class="h-3 bg-white/5 rounded w-1/2"></div>
+          </div>
+        </div>
+      `).join('');
+
+      try {
+        const response = await fetch(`https://api.themoviedb.org/3/trending/all/week?api_key=${tmdbKey}&language=es-ES`);
+        const data = await response.json();
+
+        if (!data.results || data.results.length === 0) {
+          container.innerHTML = '<div class="col-span-full text-center py-12 text-zinc-500 text-xs">No se encontraron tendencias disponibles.</div>';
+          return;
+        }
+
+        let results = data.results.filter(r => ['movie', 'tv'].includes(r.media_type));
+
+        if (currentTrendingFilter === 'movie') {
+          results = results.filter(r => r.media_type === 'movie');
+        } else if (currentTrendingFilter === 'tv') {
+          results = results.filter(r => r.media_type === 'tv');
+        }
+
+        container.innerHTML = '';
+        results.forEach(res => {
+          const title = res.title || res.name;
+          const date = res.release_date || res.first_air_date || '';
+          const year = date ? date.substring(0, 4) : '';
+          const isMovie = res.media_type === 'movie';
+          const isAnime = !isMovie && (res.genre_ids && res.genre_ids.includes(16));
+          const type = isMovie ? 'Película' : (isAnime ? 'Anime' : 'Serie');
+          const poster = res.poster_path ? `https://image.tmdb.org/t/p/w500${res.poster_path}` : '';
+          const backdrop = res.backdrop_path ? `https://image.tmdb.org/t/p/w1280${res.backdrop_path}` : '';
+          const voteAvg = res.vote_average ? res.vote_average.toFixed(1) : 'N.A';
+
+          const genreNames = (res.genre_ids || []).map(id => TMDB_GENRES_MAP[id]).filter(Boolean);
+
+          const card = document.createElement('div');
+          card.className = 'bg-[#13151D] border border-white/5 rounded-2xl hover:border-amber-500/30 transition-all duration-300 shadow-xl overflow-hidden flex flex-col justify-between group cursor-pointer';
+          card.innerHTML = `
+            <div>
+              <div class="relative w-full aspect-[2/3] bg-[#0B0C10] overflow-hidden">
+                ${poster ? `
+                  <img src="${poster}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" alt="${escapeHtml(title)}">
+                ` : `
+                  <div class="w-full h-full bg-[#0B0C10] flex items-center justify-center text-zinc-600">
+                    <i class="fa-solid fa-film text-3xl opacity-40"></i>
+                  </div>
+                `}
+                <div class="absolute inset-0 bg-gradient-to-t from-[#0B0C10] via-transparent to-transparent opacity-0 group-hover:opacity-90 transition-opacity flex items-end p-4">
+                  <span class="text-xs font-semibold text-black bg-amber-500 backdrop-blur-md px-3 py-1.5 rounded-xl flex items-center gap-1.5 shadow-lg">
+                    <i class="fa-solid fa-eye"></i> Ver detalles
+                  </span>
+                </div>
+                <div class="absolute top-2.5 left-2.5">
+                  <span class="bg-black/60 backdrop-blur-md text-zinc-300 border border-white/10 px-2.5 py-0.5 rounded-md text-[11px] font-medium">${type}</span>
+                </div>
+                <div class="absolute top-2.5 right-2.5">
+                  <span class="bg-black/75 backdrop-blur-md text-amber-400 border border-amber-500/20 px-2 py-0.5 rounded-md text-xs font-semibold flex items-center gap-1 shadow">
+                    <i class="fa-solid fa-star text-[10px]"></i> ${voteAvg}
+                  </span>
+                </div>
+              </div>
+              <div class="p-3.5 space-y-1">
+                <h4 class="font-bold text-white text-sm leading-snug truncate group-hover:text-amber-400 transition" title="${escapeHtml(title)}">${escapeHtml(title)}</h4>
+                <p class="text-[11px] text-zinc-400">${year || 'Estreno reciente'}</p>
+              </div>
+            </div>
+            <div class="p-3.5 pt-0">
+              <button type="button" class="add-trending-btn w-full py-2 px-3 rounded-xl bg-white/5 hover:bg-amber-500 hover:text-black text-zinc-300 font-medium text-xs tracking-wide border border-white/10 hover:border-amber-500 transition-all duration-200 flex items-center justify-center gap-1.5">
+                <i class="fa-solid fa-plus"></i> Agregar
+              </button>
+            </div>
+          `;
+
+          card.onclick = (e) => {
+            if (e.target.closest('.add-trending-btn')) return;
+            openDetailModal({
+              title: title,
+              type: type,
+              poster: poster,
+              backdrop: backdrop,
+              creator: year,
+              genres: genreNames,
+              overview: res.overview
+            });
+          };
+
+          const addBtn = card.querySelector('.add-trending-btn');
+          addBtn.onclick = (e) => {
+            e.stopPropagation();
+            addTrendingItem({
+              title: title,
+              type: type,
+              poster: poster,
+              backdrop: backdrop,
+              year: year,
+              genres: genreNames
+            });
+          };
+
+          container.appendChild(card);
+        });
+
+      } catch (err) {
+        container.innerHTML = '<div class="col-span-full text-center py-12 text-rose-400 text-xs">Error al cargar las tendencias semanales de TMDB.</div>';
+      }
+    }
+
+    function addTrendingItem(data) {
+      openRegisterModal({
+        title: data.title,
+        type: data.type,
+        status: 'Visto',
+        poster: data.poster,
+        creator: data.year,
+        genres: data.genres,
+        rating: 9.0
+      });
+    }
+
     function openSettingsModal() { 
       document.getElementById('inp-apikey').value = localStorage.getItem('cinelog_gemini_api_key') || '';
+      document.getElementById('inp-tmdb-apikey').value = localStorage.getItem('tmdb_api_key') || '';
       document.getElementById('inp-system-prompt').value = localStorage.getItem('cinelog_system_prompt') || DEFAULT_SYSTEM_PROMPT;
+      
+      const checkboxes = ['netflix', 'max', 'prime', 'dgo', 'crunchyroll', 'disney'];
+      checkboxes.forEach(id => {
+        const cb = document.getElementById(`plat-${id}`);
+        if (cb) {
+          cb.checked = activePlatforms.includes(cb.value);
+        }
+      });
+
       document.getElementById('modal-settings').classList.remove('hidden'); 
     }
-    function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+
+    function closeModal(id) { 
+      if (id === 'modal-detail') {
+        const content = document.getElementById('modal-detail-content');
+        content.classList.remove('scale-100', 'opacity-100');
+        content.classList.add('scale-95', 'opacity-0');
+        setTimeout(() => {
+          document.getElementById(id).classList.add('hidden');
+        }, 200);
+      } else {
+        document.getElementById(id).classList.add('hidden'); 
+      }
+    }
 
     function resetDefaultPrompt() {
       document.getElementById('inp-system-prompt').value = DEFAULT_SYSTEM_PROMPT;
@@ -529,15 +1915,38 @@ Reglas de respuesta:
 
     function saveSettings() {
       const key = document.getElementById('inp-apikey').value.trim();
+      const tmdbKey = document.getElementById('inp-tmdb-apikey').value.trim();
       const prompt = document.getElementById('inp-system-prompt').value.trim();
+      
+      const checkboxes = [
+        { id: 'plat-netflix', val: 'Netflix' },
+        { id: 'plat-max', val: 'Max' },
+        { id: 'plat-prime', val: 'Prime Video' },
+        { id: 'plat-dgo', val: 'DGO' },
+        { id: 'plat-crunchyroll', val: 'Crunchyroll' },
+        { id: 'plat-disney', val: 'Disney+' }
+      ];
+      
+      const newActive = [];
+      checkboxes.forEach(item => {
+        const cb = document.getElementById(item.id);
+        if (cb && cb.checked) {
+          newActive.push(item.val);
+        }
+      });
+
+      activePlatforms = newActive.length > 0 ? newActive : ['Netflix', 'Max', 'Prime Video', 'DGO', 'Crunchyroll', 'Disney+'];
+
+      localStorage.setItem('cinelog_platforms', JSON.stringify(activePlatforms));
       localStorage.setItem('cinelog_gemini_api_key', key);
+      localStorage.setItem('tmdb_api_key', tmdbKey);
       localStorage.setItem('cinelog_system_prompt', prompt);
+      
       applyVisualTheme();
       closeModal('modal-settings');
-      alert('Ajustes, diseño y reglas actualizados.');
+      alert('Ajustes, suscripciones, diseño y reglas actualizados.');
     }
 
-    // ASISTENTE DE REGLAS CON IA
     async function generateRulesWithAI() {
       const apiKey = document.getElementById('inp-apikey').value.trim() || localStorage.getItem('cinelog_gemini_api_key');
       const userGoal = document.getElementById('inp-ai-prompt-instruction').value.trim();
@@ -570,19 +1979,26 @@ Devuelve ÚNICAMENTE el texto final de las reglas optimizadas, sin introduccione
         });
 
         const data = await response.json();
-        const optimizedText = data.candidates[0].content.parts[0].text.trim();
+        if (!response.ok || data?.error) {
+          throw new Error(data?.error?.message || 'La API respondió con un error.');
+        }
+
+        const optimizedText = extractTextFromGeminiResponse(data);
+        if (!optimizedText) {
+          throw new Error('La IA no devolvió un texto válido.');
+        }
+
         document.getElementById('inp-system-prompt').value = optimizedText;
         document.getElementById('inp-ai-prompt-instruction').value = '';
         alert('¡Reglas actualizadas con IA! Haz clic en "Guardar Ajustes" para aplicarlas.');
       } catch(err) {
-        alert('Error al generar las reglas con IA. Verifica tu API Key.');
+        alert(err?.message || 'Error al generar las reglas con IA. Verifica tu API Key.');
       } finally {
         btn.disabled = false;
         btn.innerHTML = '<span>Optimizar</span>';
       }
     }
 
-    // CHAT CON GEMINI
     async function sendChatMessage(e) {
       e.preventDefault();
       const input = document.getElementById('chat-input');
@@ -605,24 +2021,36 @@ Devuelve ÚNICAMENTE el texto final de las reglas optimizadas, sin introduccione
       loadingDiv.id = 'chat-loading-bubble';
       loadingDiv.className = 'flex items-start gap-3';
       loadingDiv.innerHTML = `
-        <div class="w-7 h-7 rounded-full dynamic-bg flex items-center justify-center text-xs text-white shrink-0">AI</div>
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-3 text-xs text-slate-400 flex items-center gap-2">
+        <div class="w-7 h-7 rounded-full bg-amber-500 text-black font-bold flex items-center justify-center text-xs shrink-0">AI</div>
+        <div class="bg-[#13151D] border border-white/5 rounded-2xl p-3.5 text-xs text-zinc-400 flex items-center gap-2 shadow-xl">
           <i class="fa-solid fa-spinner fa-spin"></i> CineLog está pensando...
         </div>
       `;
       document.getElementById('chat-messages').appendChild(loadingDiv);
       scrollChatToBottom();
 
-      const topItems = items.filter(i => i.status === 'Visto' && i.rating >= 8.0).slice(0, 15);
-      const userProfile = topItems.map(i => `${i.title} (${i.type}, ${i.rating}/10, Plataforma: ${i.platform}, Dir: ${i.creator || 'N/A'}, Nota: ${i.review || 'N/A'})`).join('; ');
+      const highRatedItems = items.filter(i => i.status === 'Visto' && (i.rating || 0) >= 8.0);
+      const userProfile = highRatedItems.map(i => {
+        const gList = Array.isArray(i.genres) && i.genres.length ? `[Géneros: ${i.genres.join(', ')}]` : '';
+        return `${i.title} (${i.type}, ${i.rating}/10, Plataforma: ${i.platform}, ${gList}, Dir/Estudio: ${i.creator || 'N/A'}, Nota: ${i.review || 'N/A'})`;
+      }).join('; ');
 
       const systemPrompt = localStorage.getItem('cinelog_system_prompt') || DEFAULT_SYSTEM_PROMPT;
       const fullContextPrompt = `${systemPrompt}
 
-Historial de alta calificación del usuario en CineLog:
-[${userProfile || 'Aún sin registros previos'}]
+Plataformas de streaming activas del usuario (DEBE recomendar exclusivamente de esta lista y mencionar exactamente el nombre de la plataforma):
+[${activePlatforms.join(', ')}]
 
-Responde de forma concisa, conversacional y en español.`;
+Títulos registrados con calificación alta (>= 8/10) y sus géneros preferidos del usuario:
+[${userProfile || 'Aún sin registros previos de alta calificación'}]
+
+Instrucciones estrictas para cada recomendación:
+1. Título oficial y año.
+2. Formato (Película, Serie o Anime) y género.
+3. "Dónde ver": Nombre exacto de la plataforma de su lista (${activePlatforms.join(', ')}) donde está disponible.
+4. Justificación personalizada basada en sus gustos del catálogo (estricto cero spoilers).
+5. Si recomienda anime, prioriza Crunchyroll o Netflix.
+6. Responde de forma concisa, estructurada y en español.`;
 
       try {
         const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
@@ -638,11 +2066,19 @@ Responde de forma concisa, conversacional y en español.`;
         });
 
         const data = await response.json();
-        const reply = data.candidates[0].content.parts[0].text;
+        if (!response.ok || data?.error) {
+          throw new Error(data?.error?.message || 'La API respondió con un error.');
+        }
+
+        const reply = extractTextFromGeminiResponse(data);
+        if (!reply) {
+          throw new Error('La IA no devolvió una respuesta válida.');
+        }
+
         chatHistory.push({ role: 'model', text: reply });
         localStorage.setItem('cinelog_chat_history', JSON.stringify(chatHistory));
       } catch (err) {
-        chatHistory.push({ role: 'model', text: 'Error al contactar a la IA. Verifica tu API Key o conexión a internet.' });
+        chatHistory.push({ role: 'model', text: err?.message || 'Error al contactar a la IA. Verifica tu API Key o conexión a internet.' });
       } finally {
         document.getElementById('chat-loading-bubble')?.remove();
         renderChatMessages();
@@ -652,24 +2088,35 @@ Responde de forma concisa, conversacional y en español.`;
 
     function renderChatMessages() {
       const container = document.getElementById('chat-messages');
-      const initial = container.firstElementChild.outerHTML;
-      container.innerHTML = initial;
+      if (!container) return;
+
+      container.innerHTML = `
+        <div class="flex items-start gap-3">
+          <div class="w-7 h-7 rounded-full bg-amber-500 text-black font-bold flex items-center justify-center text-xs shrink-0">AI</div>
+          <div class="bg-[#13151D] border border-white/5 rounded-2xl rounded-tl-sm p-3.5 text-xs text-zinc-200 max-w-[85%] leading-relaxed shadow-xl">
+            ¡Hola! Soy tu asistente de <strong>CineLog</strong>. Analizo tus plataformas activas (${activePlatforms.join(', ')}), calificaciones y géneros favoritos.<br><br>
+            ¿Qué te gustaría ver hoy?
+          </div>
+        </div>
+      `;
+
+      if (chatHistory.length === 0) return;
 
       chatHistory.forEach(msg => {
         const div = document.createElement('div');
         div.className = msg.role === 'user' ? 'flex items-start justify-end gap-3' : 'flex items-start gap-3';
 
-        if(msg.role === 'user') {
+        if (msg.role === 'user') {
           div.innerHTML = `
-            <div class="dynamic-bg rounded-2xl rounded-tr-sm p-3 text-xs text-white max-w-[85%] leading-relaxed">
-              ${msg.text}
+            <div class="bg-amber-500 text-black font-medium rounded-2xl rounded-tr-sm p-3.5 text-xs max-w-[85%] leading-relaxed shadow-lg">
+              ${escapeHtml(msg.text || '')}
             </div>
           `;
         } else {
           div.innerHTML = `
-            <div class="w-7 h-7 rounded-full dynamic-bg flex items-center justify-center text-xs text-white shrink-0">AI</div>
-            <div class="bg-slate-900 border border-slate-800 rounded-2xl rounded-tl-sm p-3 text-xs text-slate-200 max-w-[85%] leading-relaxed whitespace-pre-line">
-              ${msg.text}
+            <div class="w-7 h-7 rounded-full bg-amber-500 text-black font-bold flex items-center justify-center text-xs shrink-0">AI</div>
+            <div class="bg-[#13151D] border border-white/5 rounded-2xl rounded-tl-sm p-3.5 text-xs text-zinc-200 max-w-[85%] leading-relaxed whitespace-pre-line shadow-xl">
+              ${escapeHtml(msg.text || '')}
             </div>
           `;
         }
@@ -679,7 +2126,7 @@ Responde de forma concisa, conversacional y en español.`;
 
     function scrollChatToBottom() {
       const c = document.getElementById('chat-messages');
-      c.scrollTop = c.scrollHeight;
+      if (c) c.scrollTop = c.scrollHeight;
     }
 
     function clearChatHistory() {
@@ -690,11 +2137,11 @@ Responde de forma concisa, conversacional y en español.`;
       }
     }
 
-    // BACKUPS
     function exportJSONBackup() {
       const data = { 
         items: items, 
         chatHistory: chatHistory, 
+        platforms: activePlatforms,
         prompt: localStorage.getItem('cinelog_system_prompt'),
         theme: localStorage.getItem('cinelog_theme'),
         layout: localStorage.getItem('cinelog_layout')
@@ -722,6 +2169,10 @@ Responde de forma concisa, conversacional y en español.`;
             chatHistory = imported.chatHistory;
             localStorage.setItem('cinelog_chat_history', JSON.stringify(chatHistory));
           }
+          if(imported.platforms) {
+            activePlatforms = imported.platforms;
+            localStorage.setItem('cinelog_platforms', JSON.stringify(activePlatforms));
+          }
           if(imported.prompt) {
             localStorage.setItem('cinelog_system_prompt', imported.prompt);
           }
@@ -742,9 +2193,11 @@ Responde de forma concisa, conversacional y en español.`;
 
     function exportCSV() {
       if(items.length === 0) return alert('No hay datos para exportar.');
-      let csv = 'ID,Título,Tipo,Estado,Plataforma,Calificación,Creador,Reseña\n';
+      let csv = 'ID,Título,Tipo,Estado,Plataforma,Calificación,Creador,Géneros,Temporadas,Reseña\n';
       items.forEach(i => {
-        csv += `"${i.id}","${i.title}","${i.type}","${i.status}","${i.platform}","${i.rating || ''}","${i.creator || ''}","${(i.review || '').replace(/"/g, '""')}"\n`;
+        const gStr = Array.isArray(i.genres) ? i.genres.join(' | ') : '';
+        const seasonsStr = Array.isArray(i.seasons) ? i.seasons.map(s => `T${s.seasonNumber}:${s.rating}`).join(' | ') : '';
+        csv += `"${i.id}","${i.title}","${i.type}","${i.status}","${i.platform}","${i.rating || ''}","${i.creator || ''}","${gStr}","${seasonsStr}","${(i.review || '').replace(/"/g, '""')}"\n`;
       });
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
