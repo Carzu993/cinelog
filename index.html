@@ -91,10 +91,10 @@
       </div>
       <div class="bg-[#13151D] border border-white/5 p-4 rounded-2xl shadow-xl">
         <p class="text-xs text-zinc-400">Promedio Nota</p>
-        <p id="stat-avg" class="text-2xl font-black text-amber-400 mt-1">0.0</p>
+        <p id="stat-avg" class="text-2xl font-black text-amber-400 mt-1">0.0 / 5</p>
       </div>
       <div class="bg-[#13151D] border border-white/5 p-4 rounded-2xl shadow-xl">
-        <p class="text-xs text-zinc-400">Top 9.0+</p>
+        <p class="text-xs text-zinc-400">Top 4.5+ ★</p>
         <p id="stat-top" class="text-2xl font-black text-emerald-400 mt-1">0</p>
       </div>
       <div class="bg-[#13151D] border border-white/5 p-4 rounded-2xl shadow-xl">
@@ -122,8 +122,8 @@
             <select id="inp-sort" onchange="renderCatalog()" class="bg-[#13151D] border border-white/5 rounded-xl px-3 py-1.5 text-xs text-zinc-200 focus:outline-none focus:border-amber-500 appearance-none pr-8">
               <option value="newest">Más recientes</option>
               <option value="oldest">Más antiguos</option>
-              <option value="rating-desc">Mejor calificados</option>
-              <option value="rating-asc">Peor calificados</option>
+              <option value="rating-desc">Mejor calificados (5★)</option>
+              <option value="rating-asc">Peor calificados (1★)</option>
               <option value="title-asc">Título (A-Z)</option>
               <option value="title-desc">Título (Z-A)</option>
             </select>
@@ -176,7 +176,7 @@
         <h2 class="text-xl font-extrabold text-white flex items-center gap-2">
           <i class="fa-solid fa-user-gear text-amber-400"></i> Mi Perfil Analítico y Rendimiento por Plataforma
         </h2>
-        <p class="text-xs text-zinc-400">Análisis detallado de satisfacción, calificaciones y distribución por cada plataforma activa.</p>
+        <p class="text-xs text-zinc-400">Análisis detallado de satisfacción en escala de 5 estrellas y distribución por cada plataforma activa.</p>
       </div>
       <button onclick="switchView('catalog')" class="bg-[#13151D] hover:bg-white/5 border border-white/5 text-zinc-300 text-xs px-3.5 py-1.5 rounded-xl transition">
         Volver al Catálogo
@@ -195,7 +195,7 @@
           <h3 class="text-sm font-bold text-white flex items-center gap-2">
             <i class="fa-solid fa-chart-line text-amber-400"></i> Rendimiento y Calidad por Plataforma
           </h3>
-          <p class="text-[11px] text-zinc-400">Evaluación de obras y desglose de notas por servicio de streaming.</p>
+          <p class="text-[11px] text-zinc-400">Evaluación de obras y desglose de notas (1★ a 5★) por servicio de streaming.</p>
         </div>
         <div id="best-platform-badge" class="flex items-center gap-1.5 bg-amber-500/10 border border-amber-500/30 text-amber-400 px-3 py-1.5 rounded-xl text-xs font-semibold">
           <!-- Plataforma mejor valorada -->
@@ -227,9 +227,9 @@
       <div class="bg-[#13151D] border border-white/5 rounded-2xl p-5 space-y-4 shadow-xl">
         <div class="flex items-center justify-between">
           <h3 class="text-sm font-bold text-white flex items-center gap-2">
-            <i class="fa-solid fa-chart-pie text-amber-400"></i> Histograma Global de Calificaciones
+            <i class="fa-solid fa-chart-pie text-amber-400"></i> Histograma Global de Estrellas (1★ - 5★)
           </h3>
-          <span class="text-[10px] text-zinc-400">Por rangos de notas</span>
+          <span class="text-[10px] text-zinc-400">Por estrellas asignadas</span>
         </div>
         <div id="profile-histogram-chart" class="space-y-3">
           <!-- Histograma -->
@@ -269,40 +269,46 @@
     <div id="trending-container" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5"></div>
   </main>
 
-  <!-- VISTA 4: CHAT CON LA IA DE CINELOG -->
+  <!-- VISTA 4: CHAT CON LA IA DE CINELOG (Rediseño Visual Glassmorphism) -->
   <main id="view-chat" class="hidden max-w-4xl mx-auto p-4 flex-1 w-full flex flex-col h-[calc(100vh-75px)]">
-    <div class="bg-[#13151D] border border-white/5 p-3.5 rounded-t-2xl flex items-center justify-between">
-      <div class="flex items-center gap-2.5">
-        <div class="w-8 h-8 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400">
-          <i class="fa-solid fa-wand-magic-sparkles text-sm"></i>
+    <!-- Contenedor con Glassmorphism -->
+    <div class="bg-zinc-950/70 backdrop-blur-md border border-zinc-800/80 rounded-2xl shadow-2xl flex-1 flex flex-col overflow-hidden my-2">
+      <!-- Cabecera del Chat -->
+      <div class="bg-zinc-950/80 border-b border-zinc-800/80 p-3.5 flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 shadow-[0_0_15px_rgba(245,158,11,0.2)]">
+            <i class="fa-solid fa-wand-magic-sparkles text-sm"></i>
+          </div>
+          <div>
+            <h3 class="text-sm font-bold text-white tracking-wide">Chat Curador CineLog</h3>
+            <p class="text-[11px] text-zinc-400">Conectado a tus plataformas activas y calificaciones de 5 estrellas</p>
+          </div>
         </div>
-        <div>
-          <h3 class="text-sm font-bold text-white">Chat Curador CineLog</h3>
-          <p class="text-[11px] text-zinc-400">Conectado a tus plataformas activas, calificaciones y géneros</p>
-        </div>
-      </div>
-      <button onclick="clearChatHistory()" class="text-zinc-400 hover:text-rose-400 text-xs p-1.5 rounded-lg transition" title="Limpiar conversación">
-        <i class="fa-solid fa-trash-can"></i>
-      </button>
-    </div>
-
-    <div id="chat-messages" class="flex-1 bg-[#0B0C10] border-x border-white/5 p-4 overflow-y-auto space-y-3">
-      <div class="flex items-start gap-3">
-        <div class="w-7 h-7 rounded-full bg-amber-500 text-black font-bold flex items-center justify-center text-xs shrink-0">AI</div>
-        <div class="bg-[#13151D] border border-white/5 rounded-2xl rounded-tl-sm p-3.5 text-xs text-zinc-200 max-w-[85%] leading-relaxed shadow-xl">
-          ¡Hola! Soy tu asistente de <strong>CineLog</strong>. Analizo tus plataformas activas, calificaciones y géneros favoritos.<br><br>
-          ¿Qué te gustaría ver hoy?
-        </div>
-      </div>
-    </div>
-
-    <div class="bg-[#13151D] border border-white/5 p-3.5 rounded-b-2xl">
-      <form onsubmit="sendChatMessage(event)" class="flex gap-2">
-        <input type="text" id="chat-input" placeholder="ej. Recomiéndame una película o anime disponible en mis plataformas..." class="flex-1 bg-[#0B0C10] border border-white/5 rounded-xl px-3 py-2 text-xs sm:text-sm focus:border-amber-500 focus:outline-none text-zinc-200">
-        <button type="submit" id="chat-send-btn" class="py-2 px-4 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-semibold text-xs transition flex items-center gap-1.5 shadow-lg shadow-amber-500/20">
-          <i class="fa-solid fa-paper-plane"></i>
+        <button onclick="clearChatHistory()" class="text-zinc-400 hover:text-rose-400 text-xs p-1.5 rounded-lg transition" title="Limpiar conversación">
+          <i class="fa-solid fa-trash-can"></i>
         </button>
-      </form>
+      </div>
+
+      <!-- Mensajes del Chat -->
+      <div id="chat-messages" class="flex-1 bg-transparent p-4 overflow-y-auto space-y-4">
+        <div class="flex items-start gap-3">
+          <div class="w-7 h-7 rounded-full bg-gradient-to-tr from-amber-500 to-yellow-400 text-black font-extrabold flex items-center justify-center text-xs shrink-0 shadow-[0_0_10px_rgba(245,158,11,0.4)]">AI</div>
+          <div class="bg-zinc-900/90 border border-zinc-800/60 rounded-2xl rounded-tl-sm p-4 text-xs text-zinc-100 max-w-[85%] leading-relaxed shadow-xl backdrop-blur-sm">
+            ¡Hola! Soy tu asistente de <strong class="text-amber-400 font-semibold">CineLog</strong>. Analizo tus plataformas activas, calificaciones de 5 estrellas y géneros favoritos.<br><br>
+            ¿Qué te gustaría ver hoy?
+          </div>
+        </div>
+      </div>
+
+      <!-- Barra de Entrada de Texto con Glassmorphism -->
+      <div class="bg-zinc-950/80 border-t border-zinc-800/80 p-3.5">
+        <form onsubmit="sendChatMessage(event)" class="flex gap-2.5">
+          <input type="text" id="chat-input" placeholder="ej. Recomiéndame una película o anime disponible en mis plataformas..." class="flex-1 bg-zinc-900/90 border border-zinc-800/80 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-zinc-100 placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500/80 transition-all duration-200">
+          <button type="submit" id="chat-send-btn" class="py-2.5 px-4 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-400 hover:to-yellow-500 text-black font-bold text-xs transition-all duration-200 flex items-center gap-1.5 shadow-lg shadow-amber-500/20 hover:scale-[1.02] active:scale-[0.98]">
+            <i class="fa-solid fa-paper-plane text-xs"></i>
+          </button>
+        </form>
+      </div>
     </div>
   </main>
 
@@ -415,8 +421,12 @@
             </select>
           </div>
           <div id="wrap-rating">
-            <label class="block text-xs font-semibold text-zinc-400 mb-1">Calificación General (1 al 10)</label>
-            <input type="number" step="0.1" min="1" max="10" id="inp-rating" class="w-full bg-[#0B0C10] border border-white/5 rounded-xl px-3 py-2 text-sm focus:border-amber-500 focus:outline-none text-amber-400 font-bold" placeholder="ej. 9.7">
+            <label class="block text-xs font-semibold text-zinc-400 mb-1">Calificación de 5 Estrellas</label>
+            <!-- Selector interactivo de 5 estrellas principal -->
+            <div id="star-rating-picker" class="flex items-center gap-1.5 bg-[#0B0C10] border border-white/5 rounded-xl px-3 py-2">
+              <!-- Renderizado dinámico de estrellas -->
+            </div>
+            <input type="hidden" id="inp-rating" value="5">
           </div>
         </div>
 
@@ -424,17 +434,17 @@
         <div id="seasons-config-section" class="hidden space-y-2 bg-[#0B0C10] border border-white/5 p-3.5 rounded-xl">
           <div class="flex items-center justify-between">
             <label class="text-xs font-bold text-amber-400 flex items-center gap-1.5">
-              <i class="fa-solid fa-layer-group"></i> Calificación por Temporadas
+              <i class="fa-solid fa-layer-group"></i> Calificación por Temporadas (5 Estrellas)
             </label>
             <div class="flex items-center gap-2">
               <span class="text-[11px] text-zinc-400">Total Temp:</span>
               <input type="number" id="inp-total-seasons" min="1" max="30" value="1" onchange="rebuildSeasonsRows()" class="w-14 bg-[#13151D] border border-white/5 rounded-lg px-2 py-1 text-xs text-center font-bold text-white focus:outline-none focus:border-amber-500">
             </div>
           </div>
-          <div id="seasons-rows-container" class="space-y-2 max-h-40 overflow-y-auto pr-1">
-            <!-- Fichas de temporadas -->
+          <div id="seasons-rows-container" class="space-y-2 max-h-48 overflow-y-auto pr-1">
+            <!-- Fichas de temporadas con selector de estrellas individual -->
           </div>
-          <p class="text-[10px] text-zinc-500">La calificación general de la serie se calcula automáticamente como el promedio de sus temporadas.</p>
+          <p class="text-[10px] text-zinc-500">La calificación global de la serie se calcula automáticamente como el promedio de las estrellas de sus temporadas.</p>
         </div>
 
         <div>
@@ -630,7 +640,7 @@ Instrucciones obligatorias para cada recomendación:
 1. "Dónde ver": Nombre exacto de la plataforma de la lista del usuario donde está disponible (prioriza Crunchyroll o Netflix si se trata de anime).
 2. CERO spoilers: No desveles giros ni desenlaces bajo ninguna circunstancia.
 3. Formato y género: Indica claramente si es Película, Serie o Anime y sus géneros principales.
-4. Justificación personalizada: Basada en los gustos e historial del usuario en su catálogo (notas altas >= 8/10).
+4. Justificación personalizada: Basada en los gustos e historial del usuario en su catálogo (notas altas >= 4.0 estrellas).
 5. Límite de opciones: Máximo 3 a 5 sugerencias claras y concisas.`;
 
     const TMDB_GENRES_MAP = {
@@ -679,6 +689,22 @@ Instrucciones obligatorias para cada recomendación:
       if (Array.isArray(savedPlatforms)) {
         activePlatforms = savedPlatforms;
       }
+      
+      // Migración automática de escala 0-10 a escala 1-5 si es necesario
+      items = items.map(item => {
+        if (item.rating !== null && item.rating !== undefined && item.rating > 5) {
+          item.rating = Number((item.rating / 2).toFixed(1));
+        }
+        if (Array.isArray(item.seasons)) {
+          item.seasons = item.seasons.map(s => {
+            if (s.rating !== null && s.rating !== undefined && s.rating > 5) {
+              return { ...s, rating: Number((s.rating / 2).toFixed(1)) };
+            }
+            return s;
+          });
+        }
+        return item;
+      });
     } catch (error) {
       items = [];
       chatHistory = [];
@@ -695,6 +721,92 @@ Instrucciones obligatorias para cada recomendación:
         .replace(/>/g, '>')
         .replace(/\"/g, '"')
         .replace(/'/g, '&#039;');
+    }
+
+    // Generador de HTML para estrellas (ej. ★★★★☆)
+    function renderStarsDisplay(rating = 5) {
+      const validRating = Math.max(0, Math.min(5, Number(rating) || 0));
+      const fullStars = Math.floor(validRating);
+      const hasHalf = (validRating - fullStars) >= 0.25 && (validRating - fullStars) < 0.75;
+      const extraFull = (validRating - fullStars) >= 0.75 ? 1 : 0;
+      const totalFull = Math.min(5, fullStars + extraFull);
+      const emptyStars = Math.max(0, 5 - totalFull - (hasHalf ? 1 : 0));
+
+      let html = '';
+      for (let i = 0; i < totalFull; i++) {
+        html += '<i class="fa-solid fa-star text-amber-400"></i>';
+      }
+      if (hasHalf) {
+        html += '<i class="fa-solid fa-star-half-stroke text-amber-400"></i>';
+      }
+      for (let i = 0; i < emptyStars; i++) {
+        html += '<i class="fa-regular fa-star text-zinc-600"></i>';
+      }
+      return html;
+    }
+
+    // Renderizar selector interactivo de 5 estrellas en formulario principal o temporadas
+    function renderStarPicker(containerId, inputId, initialValue = 5, onChangeCallback = null) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      
+      let currentVal = parseFloat(initialValue) || 5;
+      currentVal = Math.max(1, Math.min(5, currentVal));
+
+      function draw(hoverVal = null) {
+        const targetVal = hoverVal !== null ? hoverVal : currentVal;
+        container.innerHTML = '';
+        
+        for (let star = 1; star <= 5; star++) {
+          const starBtn = document.createElement('button');
+          starBtn.type = 'button';
+          starBtn.className = 'text-base sm:text-lg focus:outline-none transition-transform hover:scale-110';
+          
+          const diff = targetVal - star;
+          if (diff >= 0) {
+            starBtn.innerHTML = '<i class="fa-solid fa-star text-amber-400"></i>';
+          } else if (diff >= -0.5) {
+            starBtn.innerHTML = '<i class="fa-solid fa-star-half-stroke text-amber-400"></i>';
+          } else {
+            starBtn.innerHTML = '<i class="fa-regular fa-star text-zinc-600 hover:text-amber-400"></i>';
+          }
+
+          // Clic izquierdo (paso entero o mitad según posición)
+          starBtn.onclick = (e) => {
+            const rect = starBtn.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const isHalf = clickX < rect.width / 2;
+            currentVal = isHalf ? star - 0.5 : star;
+            currentVal = Math.max(1, currentVal);
+            document.getElementById(inputId).value = currentVal;
+            draw();
+            if (onChangeCallback) onChangeCallback(currentVal);
+          };
+
+          // Hover dinámico
+          starBtn.onmousemove = (e) => {
+            const rect = starBtn.getBoundingClientRect();
+            const hoverX = e.clientX - rect.left;
+            const isHalf = hoverX < rect.width / 2;
+            const previewVal = isHalf ? star - 0.5 : star;
+            draw(Math.max(1, previewVal));
+          };
+
+          container.appendChild(starBtn);
+        }
+
+        // Agregar etiqueta textual de valor
+        let valSpan = container.querySelector('.star-val-label');
+        if (!valSpan) {
+          valSpan = document.createElement('span');
+          valSpan.className = 'star-val-label text-xs font-bold text-amber-400 ml-2';
+          container.appendChild(valSpan);
+        }
+        valSpan.textContent = `${Number(currentVal).toFixed(1)} / 5`;
+      }
+
+      container.onmouseleave = () => draw();
+      draw();
     }
 
     function extractTextFromGeminiResponse(data) {
@@ -837,23 +949,31 @@ Instrucciones obligatorias para cada recomendación:
       container.innerHTML = '';
 
       for (let i = 1; i <= count; i++) {
-        const existingSeason = existingSeasons[i - 1] || { rating: 10, status: 'Visto' };
+        const existingSeason = existingSeasons[i - 1] || { rating: 5, status: 'Visto' };
         const row = document.createElement('div');
-        row.className = 'bg-[#13151D] border border-white/5 p-2.5 rounded-xl flex items-center justify-between gap-3';
+        row.className = 'bg-[#13151D] border border-white/5 p-3 rounded-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3';
         row.innerHTML = `
-          <div class="flex items-center gap-2">
-            <span class="text-xs font-bold text-white w-20">Temporada ${i}</span>
-            <select class="season-status-inp bg-[#0B0C10] border border-white/5 rounded-lg px-2 py-1 text-xs text-zinc-200 focus:outline-none">
+          <div class="flex items-center gap-2.5">
+            <span class="text-xs font-bold text-white w-24">Temporada ${i}</span>
+            <select class="season-status-inp bg-[#0B0C10] border border-white/5 rounded-lg px-2.5 py-1.5 text-xs text-zinc-200 focus:outline-none">
               <option value="Visto" ${existingSeason.status === 'Visto' ? 'selected' : ''}>Visto</option>
               <option value="Pendiente" ${existingSeason.status === 'Pendiente' ? 'selected' : ''}>Pendiente</option>
             </select>
           </div>
-          <div class="flex items-center gap-1.5">
-            <span class="text-[10px] text-zinc-400">Nota:</span>
-            <input type="number" step="0.1" min="1" max="10" value="${existingSeason.rating !== undefined ? existingSeason.rating : 10}" class="season-rating-inp w-16 bg-[#0B0C10] border border-white/5 rounded-lg px-2 py-1 text-xs text-amber-400 font-bold text-center focus:outline-none" oninput="calculateSeriesAverageRating()">
+          <div class="flex items-center gap-2">
+            <span class="text-[11px] text-zinc-400">Estrellas:</span>
+            <div id="season-star-picker-${i}" class="flex items-center gap-1 bg-[#0B0C10] border border-white/5 rounded-lg px-2.5 py-1"></div>
+            <input type="hidden" class="season-rating-inp" value="${existingSeason.rating !== undefined ? existingSeason.rating : 5}">
           </div>
         `;
         container.appendChild(row);
+
+        // Inicializar selector interactivo de estrellas por temporada
+        renderStarPicker(`season-star-picker-${i}`, row.querySelector('.season-rating-inp').id || '', existingSeason.rating !== undefined ? existingSeason.rating : 5, () => {
+          calculateSeriesAverageRating();
+        });
+        // Asignar ID único al input hidden de rating de temporada
+        row.querySelector('.season-rating-inp').id = `season-rating-input-${i}`;
       }
       calculateSeriesAverageRating();
     }
@@ -877,8 +997,10 @@ Instrucciones obligatorias para cada recomendación:
       });
 
       if (count > 0) {
-        const avg = (sum / count).toFixed(1);
+        const avg = Number((sum / count).toFixed(1));
         document.getElementById('inp-rating').value = avg;
+        // Actualizar picker principal de estrellas de la serie con el promedio calculado
+        renderStarPicker('star-rating-picker', 'inp-rating', avg);
       }
     }
 
@@ -930,8 +1052,8 @@ Instrucciones obligatorias para cada recomendación:
         </div>
         <div class="bg-[#13151D] border border-white/5 p-4 rounded-2xl shadow-xl">
           <p class="text-xs text-zinc-400 font-medium">Promedio Global Calificación</p>
-          <p class="text-3xl font-black text-amber-400 mt-1">${avgGlobal}</p>
-          <p class="text-[10px] text-zinc-500 mt-1">Escala de 1.0 a 10.0</p>
+          <p class="text-3xl font-black text-amber-400 mt-1">${avgGlobal} / 5</p>
+          <p class="text-[10px] text-zinc-500 mt-1">Escala de 1.0 a 5.0 Estrellas</p>
         </div>
         <div class="bg-[#13151D] border border-white/5 p-4 rounded-2xl shadow-xl">
           <p class="text-xs text-zinc-400 font-medium">Plataforma Favorita</p>
@@ -940,8 +1062,7 @@ Instrucciones obligatorias para cada recomendación:
         </div>
       `;
 
-      // 2. Análisis por Plataforma (Requisito 3)
-      // Recopilar todas las plataformas activas o presentes en items
+      // 2. Análisis por Plataforma
       const platformsSet = new Set([...activePlatforms]);
       items.forEach(i => { if(i.platform) platformsSet.add(i.platform); });
       const allPlatformsList = Array.from(platformsSet);
@@ -957,18 +1078,14 @@ Instrucciones obligatorias para cada recomendación:
           avgRating = sum / platVistos.length;
         }
 
-        // Distribución de notas para barra segmentada
-        // - % Obras Maestras (9.0 - 10.0) en color verde esmeralda (bg-emerald-500)
-        // - % Buenas / Recomendadas (7.0 - 8.9) en color dorado/ámbar (bg-amber-400)
-        // - % Regulares / Bajas (< 7.0) en color gris/zinc (bg-zinc-600)
         let masterpieces = 0;
         let good = 0;
         let regularOrLow = 0;
 
         platVistos.forEach(i => {
           const r = i.rating || 0;
-          if (r >= 9.0) masterpieces++;
-          else if (r >= 7.0) good++;
+          if (r >= 4.5) masterpieces++;
+          else if (r >= 3.5) good++;
           else regularOrLow++;
         });
 
@@ -989,7 +1106,6 @@ Instrucciones obligatorias para cada recomendación:
         });
       });
 
-      // Ordenar por promedio de calificación para hallar la "Plataforma Mejor Valorada"
       platformStats.sort((a, b) => b.avgRaw - a.avgRaw);
       const bestPlatform = platformStats.find(p => p.vistosCount > 0) || platformStats[0];
 
@@ -997,7 +1113,7 @@ Instrucciones obligatorias para cada recomendación:
       if (bestPlatform && bestPlatform.vistosCount > 0) {
         bestPlatformBadgeEl.innerHTML = `
           <i class="fa-solid fa-crown text-amber-400"></i>
-          <span>Plataforma Mejor Valorada: <strong>${escapeHtml(bestPlatform.name)}</strong> (★ ${bestPlatform.avg})</span>
+          <span>Plataforma Mejor Valorada: <strong>${escapeHtml(bestPlatform.name)}</strong> (${bestPlatform.avg}★)</span>
         `;
         bestPlatformBadgeEl.classList.remove('hidden');
       } else {
@@ -1022,7 +1138,7 @@ Instrucciones obligatorias para cada recomendación:
               <span class="text-xs font-bold text-white bg-black/40 border border-white/10 px-2.5 py-1 rounded-lg">${escapeHtml(p.name)}</span>
             </div>
             <span class="text-xs font-black text-amber-400 flex items-center gap-1">
-              <i class="fa-solid fa-star text-[10px]"></i> ${p.avg}
+              <i class="fa-solid fa-star text-[10px]"></i> ${p.avg} / 5
             </span>
           </div>
 
@@ -1031,21 +1147,20 @@ Instrucciones obligatorias para cada recomendación:
             <span>Vistos con nota: <strong class="text-white">${p.vistosCount}</strong></span>
           </div>
 
-          <!-- Barra segmentada de distribución de notas -->
           <div class="space-y-1 pt-1">
             <div class="flex justify-between text-[10px] text-zinc-400 font-medium">
-              <span>Distribución de Notas</span>
-              <span class="text-emerald-400">${p.pctMasterpieces}% Top</span>
+              <span>Distribución de Estrellas</span>
+              <span class="text-emerald-400">${p.pctMasterpieces}% 4.5-5★</span>
             </div>
             <div class="w-full bg-black/60 rounded-full h-2.5 overflow-hidden flex border border-white/5">
-              <div class="bg-emerald-500 h-2.5 transition-all duration-500" style="width: ${p.pctMasterpieces}%" title="Obras Maestras (9.0 - 10)"></div>
-              <div class="bg-amber-400 h-2.5 transition-all duration-500" style="width: ${p.pctGood}%" title="Buenas / Recomendadas (7.0 - 8.9)"></div>
-              <div class="bg-zinc-600 h-2.5 transition-all duration-500" style="width: ${p.pctRegular}%" title="Regulares / Bajas (< 7.0)"></div>
+              <div class="bg-emerald-500 h-2.5 transition-all duration-500" style="width: ${p.pctMasterpieces}%" title="Excelentes (4.5 - 5★)"></div>
+              <div class="bg-amber-400 h-2.5 transition-all duration-500" style="width: ${p.pctGood}%" title="Buenas (3.5 - 4.4★)"></div>
+              <div class="bg-zinc-600 h-2.5 transition-all duration-500" style="width: ${p.pctRegular}%" title="Bajas (< 3.5★)"></div>
             </div>
             <div class="flex items-center justify-between text-[9px] text-zinc-500 pt-0.5">
-              <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> 9-10 (${p.pctMasterpieces}%)</span>
-              <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span> 7-8.9 (${p.pctGood}%)</span>
-              <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-zinc-600"></span> <7 (${p.pctRegular}%)</span>
+              <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> 4.5-5★ (${p.pctMasterpieces}%)</span>
+              <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span> 3.5-4.4★ (${p.pctGood}%)</span>
+              <span class="flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-zinc-600"></span> <3.5★ (${p.pctRegular}%)</span>
             </div>
           </div>
         `;
@@ -1091,21 +1206,21 @@ Instrucciones obligatorias para cada recomendación:
         });
       }
 
-      // 4. Histograma de Calificaciones
+      // 4. Histograma de Estrellas
       const histogramContainer = document.getElementById('profile-histogram-chart');
       const ranges = {
-        masterpieces: { label: '9.0 - 10 (Obras Maestras)', count: 0, color: 'bg-emerald-500' },
-        veryGood: { label: '7.0 - 8.9 (Muy Buenas)', count: 0, color: 'bg-amber-400' },
-        regular: { label: '5.0 - 6.9 (Regulares)', count: 0, color: 'bg-amber-600' },
-        bad: { label: '< 5.0 (Malas)', count: 0, color: 'bg-zinc-600' }
+        five: { label: '5 Estrellas (★★★★★)', count: 0, color: 'bg-emerald-500' },
+        four: { label: '4 Estrellas (★★★★☆)', count: 0, color: 'bg-amber-400' },
+        three: { label: '3 Estrellas (★★★☆☆)', count: 0, color: 'bg-amber-600' },
+        low: { label: '1 - 2 Estrellas (★★☆☆☆ o menos)', count: 0, color: 'bg-zinc-600' }
       };
 
       vistos.forEach(i => {
         const r = i.rating || 0;
-        if (r >= 9.0) ranges.masterpieces.count++;
-        else if (r >= 7.0) ranges.veryGood.count++;
-        else if (r >= 5.0) ranges.regular.count++;
-        else ranges.bad.count++;
+        if (r >= 4.75) ranges.five.count++;
+        else if (r >= 3.75) ranges.four.count++;
+        else if (r >= 2.75) ranges.three.count++;
+        else ranges.low.count++;
       });
 
       histogramContainer.innerHTML = '';
@@ -1240,9 +1355,6 @@ Instrucciones obligatorias para cada recomendación:
 
       filtered.forEach(it => {
         const card = document.createElement('div');
-        const badgeColor = it.type === 'Anime' ? 'bg-orange-500/20 text-orange-400 border-orange-500/30' : 
-                           it.type === 'Serie' ? 'bg-purple-500/20 text-purple-400 border-purple-500/30' : 
-                           'bg-blue-500/20 text-blue-400 border-blue-500/30';
         const safeTitle = escapeHtml(it.title || 'Sin título');
         const safeCreator = escapeHtml(it.creator || 'N/A');
         const safePlatform = escapeHtml(it.platform || 'N/A');
@@ -1250,6 +1362,7 @@ Instrucciones obligatorias para cada recomendación:
 
         const genresList = Array.isArray(it.genres) ? it.genres : [];
         const genresHtml = genresList.map(g => `<span class="text-[10px] bg-black/60 text-zinc-300 px-2.5 py-0.5 rounded-md border border-white/10">${escapeHtml(g)}</span>`).join('');
+        const starsHtml = renderStarsDisplay(it.rating || 5);
 
         if (layout === 'list') {
           card.className = 'bg-[#13151D] border border-white/5 hover:border-amber-500/30 rounded-2xl px-4 py-3 flex items-center justify-between gap-4 transition cursor-pointer hover:shadow-xl group';
@@ -1273,9 +1386,10 @@ Instrucciones obligatorias para cada recomendación:
             </div>
             <div class="flex items-center gap-3 shrink-0">
               ${it.status === 'Visto' ? `
-                <span class="bg-black/75 backdrop-blur-md text-amber-400 border border-amber-500/20 px-2 py-0.5 rounded-md text-xs font-semibold flex items-center gap-1">
-                  <i class="fa-solid fa-star text-[10px]"></i> ${Number(it.rating).toFixed(1)}
-                </span>
+                <div class="bg-black/75 backdrop-blur-md text-amber-400 border border-amber-500/20 px-2.5 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 shadow">
+                  <div class="flex items-center gap-0.5 text-[11px]">${starsHtml}</div>
+                  <span class="text-white font-bold ml-1">${Number(it.rating || 0).toFixed(1)} / 5</span>
+                </div>
               ` : `<span class="text-[10px] bg-black/60 text-zinc-300 px-2 py-0.5 rounded-md border border-white/10">Pendiente</span>`}
               <button onclick="event.stopPropagation(); deleteItem('${it.id}')" class="text-zinc-500 hover:text-rose-400 text-xs transition"><i class="fa-solid fa-trash"></i></button>
             </div>
@@ -1304,9 +1418,10 @@ Instrucciones obligatorias para cada recomendación:
                 </div>
                 <div class="absolute top-2.5 right-2.5">
                   ${it.status === 'Visto' ? `
-                    <span class="bg-black/75 backdrop-blur-md text-amber-400 border border-amber-500/20 px-2 py-0.5 rounded-md text-xs font-semibold flex items-center gap-1 shadow">
-                      <i class="fa-solid fa-star text-[10px]"></i> ${Number(it.rating).toFixed(1)}
-                    </span>
+                    <div class="bg-black/75 backdrop-blur-md text-amber-400 border border-amber-500/20 px-2.5 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 shadow">
+                      <div class="flex items-center gap-0.5 text-[10px]">${starsHtml}</div>
+                      <span class="text-white font-bold ml-0.5">${Number(it.rating || 0).toFixed(1)}</span>
+                    </div>
                   ` : `<span class="bg-black/60 backdrop-blur-md text-zinc-300 border border-white/10 px-2 py-0.5 rounded-md text-[11px] font-medium">Pendiente</span>`}
                 </div>
               </div>
@@ -1342,7 +1457,7 @@ Instrucciones obligatorias para cada recomendación:
           seasonsArray.push({
             seasonNumber: idx + 1,
             status: statusInputs[idx] ? statusInputs[idx].value : 'Visto',
-            rating: parseFloat(inp.value) || 10
+            rating: parseFloat(inp.value) || 5
           });
         });
       }
@@ -1353,7 +1468,7 @@ Instrucciones obligatorias para cada recomendación:
         type: type,
         status: status,
         platform: document.getElementById('inp-platform').value,
-        rating: status === 'Visto' ? parseFloat(document.getElementById('inp-rating').value) || 0 : null,
+        rating: status === 'Visto' ? parseFloat(document.getElementById('inp-rating').value) || 5 : null,
         creator: document.getElementById('inp-creator').value.trim(),
         genres: genresArray,
         seasons: seasonsArray,
@@ -1388,10 +1503,10 @@ Instrucciones obligatorias para cada recomendación:
 
       if(vistos.length > 0) {
         const sum = vistos.reduce((acc, curr) => acc + (curr.rating || 0), 0);
-        document.getElementById('stat-avg').textContent = (sum / vistos.length).toFixed(1);
-        document.getElementById('stat-top').textContent = vistos.filter(i => i.rating >= 9.0).length;
+        document.getElementById('stat-avg').textContent = `${(sum / vistos.length).toFixed(1)} / 5`;
+        document.getElementById('stat-top').textContent = vistos.filter(i => (i.rating || 0) >= 4.5).length;
       } else {
-        document.getElementById('stat-avg').textContent = '0.0';
+        document.getElementById('stat-avg').textContent = '0.0 / 5';
         document.getElementById('stat-top').textContent = '0';
       }
     }
@@ -1406,7 +1521,7 @@ Instrucciones obligatorias para cada recomendación:
       let candidatePool = items.filter(i => i.status === 'Watchlist' && activePlatforms.includes(i.platform));
       
       if (candidatePool.length === 0) {
-        candidatePool = items.filter(i => (i.rating || 0) >= 8.5 && activePlatforms.includes(i.platform));
+        candidatePool = items.filter(i => (i.rating || 0) >= 4.0 && activePlatforms.includes(i.platform));
       }
       
       if (candidatePool.length === 0) {
@@ -1436,7 +1551,7 @@ Instrucciones obligatorias para cada recomendación:
           <div class="space-y-1 min-w-0">
             <span class="bg-black/60 backdrop-blur-md text-zinc-300 border border-white/10 px-2 py-0.5 rounded-md text-[11px] font-medium">${escapeHtml(chosen.type)}</span>
             <h4 class="text-sm font-bold text-white truncate">${safeTitle}</h4>
-            <p class="text-xs text-zinc-400">${escapeHtml(chosen.platform)} • ${chosen.status === 'Visto' ? `★ ${chosen.rating}/10` : 'Pendiente'}</p>
+            <p class="text-xs text-zinc-400">${escapeHtml(chosen.platform)} • ${chosen.status === 'Visto' ? `${renderStarsDisplay(chosen.rating)} ${chosen.rating}/5` : 'Pendiente'}</p>
             ${chosen.creator ? `<p class="text-[11px] text-zinc-500 truncate">${escapeHtml(chosen.creator)}</p>` : ''}
           </div>
         </div>
@@ -1454,6 +1569,10 @@ Instrucciones obligatorias para cada recomendación:
       document.getElementById('tmdb-results').classList.add('hidden');
       document.getElementById('typeahead-dropdown').classList.add('hidden');
 
+      const initialRating = prefill && prefill.rating !== undefined ? prefill.rating : 5;
+      document.getElementById('inp-rating').value = initialRating;
+      renderStarPicker('star-rating-picker', 'inp-rating', initialRating);
+
       if (prefill) {
         document.getElementById('inp-title').value = prefill.title || '';
         document.getElementById('inp-type').value = prefill.type || 'Película';
@@ -1462,7 +1581,6 @@ Instrucciones obligatorias para cada recomendación:
         document.getElementById('inp-creator').value = prefill.creator || '';
         document.getElementById('inp-genres').value = Array.isArray(prefill.genres) ? prefill.genres.join(', ') : (prefill.genres || '');
         document.getElementById('inp-review').value = '';
-        document.getElementById('inp-rating').value = prefill.rating || '';
         
         toggleRatingField();
         toggleSeasonsFields();
@@ -1484,6 +1602,8 @@ Instrucciones obligatorias para cada recomendación:
         }
       } else {
         document.getElementById('form-item').reset();
+        document.getElementById('inp-rating').value = 5;
+        renderStarPicker('star-rating-picker', 'inp-rating', 5);
         document.getElementById('poster-preview-container').classList.add('hidden');
         document.getElementById('inp-total-seasons').value = 1;
         toggleRatingField();
@@ -1536,7 +1656,9 @@ Instrucciones obligatorias para cada recomendación:
             <span class="font-bold text-white">Temporada ${s.seasonNumber}</span>
             <div class="flex items-center gap-3">
               <span class="text-zinc-400">${s.status}</span>
-              <span class="font-black text-amber-400">★ ${s.rating}/10</span>
+              <span class="font-black text-amber-400 flex items-center gap-1">
+                <span class="text-[10px]">${renderStarsDisplay(s.rating)}</span> ${s.rating}/5
+              </span>
             </div>
           </div>
         `).join('');
@@ -1550,7 +1672,9 @@ Instrucciones obligatorias para cada recomendación:
         userRecordEl.innerHTML = `
           <div class="flex items-center justify-between">
             <span class="text-xs font-bold text-emerald-400 flex items-center gap-1.5"><i class="fa-solid fa-check-circle"></i> En tu Catálogo Personal</span>
-            <span class="text-xs font-bold text-amber-400">${existingItem.status === 'Visto' ? `★ ${Number(existingItem.rating).toFixed(1)}/10` : 'Pendiente'}</span>
+            <div class="flex items-center gap-1.5 text-amber-400 text-xs font-bold">
+              ${existingItem.status === 'Visto' ? `<div class="flex items-center gap-0.5 text-[11px]">${renderStarsDisplay(existingItem.rating)}</div> <span>${Number(existingItem.rating || 0).toFixed(1)} / 5</span>` : 'Pendiente'}
+            </div>
           </div>
           <p class="text-xs text-zinc-300">Plataforma: <span class="text-white font-medium">${existingItem.platform}</span> • Estado: <span class="text-white font-medium">${existingItem.status}</span></p>
           ${existingItem.review ? `<p class="text-xs italic text-zinc-400">"${escapeHtml(existingItem.review)}"</p>` : ''}
@@ -1795,7 +1919,8 @@ Instrucciones obligatorias para cada recomendación:
           const type = isMovie ? 'Película' : (isAnime ? 'Anime' : 'Serie');
           const poster = res.poster_path ? `https://image.tmdb.org/t/p/w500${res.poster_path}` : '';
           const backdrop = res.backdrop_path ? `https://image.tmdb.org/t/p/w1280${res.backdrop_path}` : '';
-          const voteAvg = res.vote_average ? res.vote_average.toFixed(1) : 'N.A';
+          const voteAvg10 = res.vote_average ? res.vote_average : 8;
+          const voteAvg5 = Number((voteAvg10 / 2).toFixed(1));
 
           const genreNames = (res.genre_ids || []).map(id => TMDB_GENRES_MAP[id]).filter(Boolean);
 
@@ -1820,9 +1945,9 @@ Instrucciones obligatorias para cada recomendación:
                   <span class="bg-black/60 backdrop-blur-md text-zinc-300 border border-white/10 px-2.5 py-0.5 rounded-md text-[11px] font-medium">${type}</span>
                 </div>
                 <div class="absolute top-2.5 right-2.5">
-                  <span class="bg-black/75 backdrop-blur-md text-amber-400 border border-amber-500/20 px-2 py-0.5 rounded-md text-xs font-semibold flex items-center gap-1 shadow">
-                    <i class="fa-solid fa-star text-[10px]"></i> ${voteAvg}
-                  </span>
+                  <div class="bg-black/75 backdrop-blur-md text-amber-400 border border-amber-500/20 px-2 py-0.5 rounded-md text-xs font-semibold flex items-center gap-1 shadow">
+                    <i class="fa-solid fa-star text-[10px]"></i> ${voteAvg5}
+                  </div>
                 </div>
               </div>
               <div class="p-3.5 space-y-1">
@@ -1859,7 +1984,8 @@ Instrucciones obligatorias para cada recomendación:
               poster: poster,
               backdrop: backdrop,
               year: year,
-              genres: genreNames
+              genres: genreNames,
+              rating: voteAvg5
             });
           };
 
@@ -1879,7 +2005,7 @@ Instrucciones obligatorias para cada recomendación:
         poster: data.poster,
         creator: data.year,
         genres: data.genres,
-        rating: 9.0
+        rating: data.rating || 4.5
       });
     }
 
@@ -2024,18 +2150,23 @@ Devuelve ÚNICAMENTE el texto final de las reglas optimizadas, sin introduccione
       loadingDiv.id = 'chat-loading-bubble';
       loadingDiv.className = 'flex items-start gap-3';
       loadingDiv.innerHTML = `
-        <div class="w-7 h-7 rounded-full bg-amber-500 text-black font-bold flex items-center justify-center text-xs shrink-0">AI</div>
-        <div class="bg-[#13151D] border border-white/5 rounded-2xl p-3.5 text-xs text-zinc-400 flex items-center gap-2 shadow-xl">
-          <i class="fa-solid fa-spinner fa-spin"></i> CineLog está pensando...
+        <div class="w-7 h-7 rounded-full bg-gradient-to-tr from-amber-500 to-yellow-400 text-black font-extrabold flex items-center justify-center text-xs shrink-0 shadow-[0_0_10px_rgba(245,158,11,0.4)]">AI</div>
+        <div class="bg-zinc-900/90 border border-zinc-800/60 rounded-2xl p-4 text-xs text-zinc-300 flex items-center gap-2.5 shadow-xl backdrop-blur-sm">
+          <div class="flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-amber-400 animate-bounce" style="animation-delay: 0ms"></span>
+            <span class="w-2 h-2 rounded-full bg-amber-400 animate-bounce" style="animation-delay: 150ms"></span>
+            <span class="w-2 h-2 rounded-full bg-amber-400 animate-bounce" style="animation-delay: 300ms"></span>
+          </div>
+          <span class="text-zinc-400 font-medium">CineLog está consultando el archivo cinematográfico...</span>
         </div>
       `;
       document.getElementById('chat-messages').appendChild(loadingDiv);
       scrollChatToBottom();
 
-      const highRatedItems = items.filter(i => i.status === 'Visto' && (i.rating || 0) >= 8.0);
+      const highRatedItems = items.filter(i => i.status === 'Visto' && (i.rating || 0) >= 4.0);
       const userProfile = highRatedItems.map(i => {
         const gList = Array.isArray(i.genres) && i.genres.length ? `[Géneros: ${i.genres.join(', ')}]` : '';
-        return `${i.title} (${i.type}, ${i.rating}/10, Plataforma: ${i.platform}, ${gList}, Dir/Estudio: ${i.creator || 'N/A'}, Nota: ${i.review || 'N/A'})`;
+        return `${i.title} (${i.type}, ${i.rating}/5★, Plataforma: ${i.platform}, ${gList}, Dir/Estudio: ${i.creator || 'N/A'}, Nota: ${i.review || 'N/A'})`;
       }).join('; ');
 
       const systemPrompt = localStorage.getItem('cinelog_system_prompt') || DEFAULT_SYSTEM_PROMPT;
@@ -2044,7 +2175,7 @@ Devuelve ÚNICAMENTE el texto final de las reglas optimizadas, sin introduccione
 Plataformas de streaming activas del usuario (DEBE recomendar exclusivamente de esta lista y mencionar exactamente el nombre de la plataforma):
 [${activePlatforms.join(', ')}]
 
-Títulos registrados con calificación alta (>= 8/10) y sus géneros preferidos del usuario:
+Títulos registrados con calificación alta (>= 4.0/5 estrellas) y sus géneros preferidos del usuario:
 [${userProfile || 'Aún sin registros previos de alta calificación'}]
 
 Instrucciones estrictas para cada recomendación:
@@ -2095,9 +2226,9 @@ Instrucciones estrictas para cada recomendación:
 
       container.innerHTML = `
         <div class="flex items-start gap-3">
-          <div class="w-7 h-7 rounded-full bg-amber-500 text-black font-bold flex items-center justify-center text-xs shrink-0">AI</div>
-          <div class="bg-[#13151D] border border-white/5 rounded-2xl rounded-tl-sm p-3.5 text-xs text-zinc-200 max-w-[85%] leading-relaxed shadow-xl">
-            ¡Hola! Soy tu asistente de <strong>CineLog</strong>. Analizo tus plataformas activas (${activePlatforms.join(', ')}), calificaciones y géneros favoritos.<br><br>
+          <div class="w-7 h-7 rounded-full bg-gradient-to-tr from-amber-500 to-yellow-400 text-black font-extrabold flex items-center justify-center text-xs shrink-0 shadow-[0_0_10px_rgba(245,158,11,0.4)]">AI</div>
+          <div class="bg-zinc-900/90 border border-zinc-800/60 rounded-2xl rounded-tl-sm p-4 text-xs text-zinc-100 max-w-[85%] leading-relaxed shadow-xl backdrop-blur-sm">
+            ¡Hola! Soy tu asistente de <strong class="text-amber-400 font-semibold">CineLog</strong>. Analizo tus plataformas activas (${activePlatforms.join(', ')}), calificaciones de 5 estrellas y géneros favoritos.<br><br>
             ¿Qué te gustaría ver hoy?
           </div>
         </div>
@@ -2111,14 +2242,14 @@ Instrucciones estrictas para cada recomendación:
 
         if (msg.role === 'user') {
           div.innerHTML = `
-            <div class="bg-amber-500 text-black font-medium rounded-2xl rounded-tr-sm p-3.5 text-xs max-w-[85%] leading-relaxed shadow-lg">
+            <div class="bg-gradient-to-r from-amber-500 to-yellow-600 text-black font-medium rounded-2xl rounded-tr-sm p-3.5 text-xs max-w-[85%] leading-relaxed shadow-lg">
               ${escapeHtml(msg.text || '')}
             </div>
           `;
         } else {
           div.innerHTML = `
-            <div class="w-7 h-7 rounded-full bg-amber-500 text-black font-bold flex items-center justify-center text-xs shrink-0">AI</div>
-            <div class="bg-[#13151D] border border-white/5 rounded-2xl rounded-tl-sm p-3.5 text-xs text-zinc-200 max-w-[85%] leading-relaxed whitespace-pre-line shadow-xl">
+            <div class="w-7 h-7 rounded-full bg-gradient-to-tr from-amber-500 to-yellow-400 text-black font-extrabold flex items-center justify-center text-xs shrink-0 shadow-[0_0_10px_rgba(245,158,11,0.4)]">AI</div>
+            <div class="bg-zinc-900/90 border border-zinc-800/60 rounded-2xl rounded-tl-sm p-4 text-xs text-zinc-100 max-w-[85%] leading-relaxed whitespace-pre-line shadow-xl backdrop-blur-sm">
               ${escapeHtml(msg.text || '')}
             </div>
           `;
@@ -2196,10 +2327,10 @@ Instrucciones estrictas para cada recomendación:
 
     function exportCSV() {
       if(items.length === 0) return alert('No hay datos para exportar.');
-      let csv = 'ID,Título,Tipo,Estado,Plataforma,Calificación,Creador,Géneros,Temporadas,Reseña\n';
+      let csv = 'ID,Título,Tipo,Estado,Plataforma,Calificación(5★),Creador,Géneros,Temporadas,Reseña\n';
       items.forEach(i => {
         const gStr = Array.isArray(i.genres) ? i.genres.join(' | ') : '';
-        const seasonsStr = Array.isArray(i.seasons) ? i.seasons.map(s => `T${s.seasonNumber}:${s.rating}`).join(' | ') : '';
+        const seasonsStr = Array.isArray(i.seasons) ? i.seasons.map(s => `T${s.seasonNumber}:${s.rating}★`).join(' | ') : '';
         csv += `"${i.id}","${i.title}","${i.type}","${i.status}","${i.platform}","${i.rating || ''}","${i.creator || ''}","${gStr}","${seasonsStr}","${(i.review || '').replace(/"/g, '""')}"\n`;
       });
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
