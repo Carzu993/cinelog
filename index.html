@@ -70,7 +70,7 @@
         </nav>
         
         <!-- Botón Ruleta / Sorpréndeme -->
-        <button onclick="openRouletteModal()" class="w-full py-2 px-3 rounded-xl bg-white/5 hover:bg-amber-500 hover:text-black text-zinc-300 font-medium text-xs tracking-wide border border-white/10 hover:border-amber-500 transition-all duration-200 flex items-center justify-center gap-1.5" title="Sorpréndeme / Qué ver hoy">
+        <button onclick="openSurpriseModal()" class="w-full py-2 px-3 rounded-xl bg-white/5 hover:bg-amber-500 hover:text-black text-zinc-300 font-medium text-xs tracking-wide border border-white/10 hover:border-amber-500 transition-all duration-200 flex items-center justify-center gap-1.5" title="Sorpréndeme / Tops 2026">
           <i class="fa-solid fa-dice text-sm text-amber-400 animate-pulse"></i> <span class="hidden sm:inline">Sorpréndeme</span>
         </button>
 
@@ -91,7 +91,11 @@
       </div>
       <div class="bg-[#13151D] border border-white/5 p-4 rounded-2xl shadow-xl">
         <p class="text-xs text-zinc-400">Promedio Nota</p>
-        <p id="stat-avg" class="text-2xl font-black text-amber-400 mt-1">0.0 / 5</p>
+        <div class="mt-1 flex items-baseline justify-center gap-1">
+          <span id="stat-avg-num" class="text-2xl font-bold text-amber-400">0.0</span>
+          <span class="text-base font-medium text-zinc-400/80">/ 5.0</span>
+          <span id="stat-avg" class="hidden">0.0 / 5.0</span>
+        </div>
       </div>
       <div class="bg-[#13151D] border border-white/5 p-4 rounded-2xl shadow-xl">
         <p class="text-xs text-zinc-400">Top 4.5+ ★</p>
@@ -480,31 +484,41 @@
     </div>
   </div>
 
-  <!-- MODAL: RULETA SORPRÉNDEME / QUÉ VER HOY -->
-  <div id="modal-roulette" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-[#13151D] border border-white/5 rounded-2xl w-full max-w-md p-6 space-y-5 text-center shadow-2xl relative animate-in fade-in zoom-in duration-200">
-      <button onclick="closeModal('modal-roulette')" class="absolute top-3 right-3 text-zinc-400 hover:text-white w-7 h-7 rounded-full flex items-center justify-center bg-[#0B0C10] border border-white/5 transition">
-        <i class="fa-solid fa-xmark text-xs"></i>
+  <!-- MODAL: "SORPRÉNDEME" CINEMATOGRÁFICO 2026 -->
+  <div id="modal-surprise" class="fixed inset-0 bg-black/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-2 sm:p-4 overflow-y-auto">
+    <div class="bg-zinc-950 border border-zinc-800 rounded-3xl w-full max-w-lg overflow-hidden shadow-2xl relative transform transition-all scale-95 opacity-0 duration-300" id="modal-surprise-content">
+      <button onclick="closeModal('modal-surprise')" class="absolute top-3 right-3 z-20 bg-black/70 hover:bg-black text-white w-8 h-8 rounded-full flex items-center justify-center border border-white/10 transition" title="Cerrar">
+        <i class="fa-solid fa-xmark text-sm"></i>
       </button>
 
-      <div class="space-y-2">
-        <div class="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center mx-auto text-amber-400 text-xl">
-          <i class="fa-solid fa-dice animate-spin"></i>
+      <!-- Cabecera del Modal -->
+      <div class="p-5 pb-3 border-b border-zinc-900 flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400">
+            <i class="fa-solid fa-dice text-sm animate-spin"></i>
+          </div>
+          <div>
+            <h3 class="text-sm font-bold text-white tracking-wide">Selección Sorpresa 2026</h3>
+            <p id="surprise-genre-badge-header" class="text-[11px] text-zinc-400">Género actual: <span class="text-amber-400 font-semibold">Cargando...</span></p>
+          </div>
         </div>
-        <h3 class="text-lg font-extrabold text-white">¿Qué ver hoy? (Ruleta de Pendientes)</h3>
-        <p class="text-xs text-zinc-400">Seleccionado aleatoriamente de tu Watchlist respetando tus plataformas activas.</p>
       </div>
 
-      <div id="roulette-result-card" class="bg-[#0B0C10] border border-white/5 rounded-xl p-4 space-y-3 text-left">
-        <!-- Tarjeta del resultado aleatorio -->
+      <!-- Contenido de la sugerencia o Spinner de carga -->
+      <div id="surprise-body-container" class="p-6 space-y-4">
+        <div class="flex flex-col items-center justify-center py-16 space-y-3">
+          <div class="w-10 h-10 border-4 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
+          <p class="text-xs text-zinc-400 font-medium">Buscando estreno 2026 en TMDB...</p>
+        </div>
       </div>
 
-      <div class="flex gap-2 justify-center pt-1">
-        <button onclick="spinRoulette()" class="bg-[#13151D] hover:bg-white/5 border border-white/5 text-zinc-200 text-xs font-semibold px-4 py-2.5 rounded-xl transition flex items-center gap-2">
-          <i class="fa-solid fa-rotate"></i> Girar de nuevo
+      <!-- Pie del Modal con Botones de Acción -->
+      <div class="bg-zinc-950/90 border-t border-zinc-900 p-4 flex flex-col sm:flex-row items-center justify-between gap-2.5">
+        <button onclick="fetchSurpriseMovie()" class="w-full sm:w-auto py-2.5 px-4 rounded-xl bg-[#13151D] hover:bg-white/5 border border-zinc-800 text-zinc-200 text-xs font-semibold transition flex items-center justify-center gap-2">
+          <i class="fa-solid fa-rotate text-amber-400"></i> Probar otro género
         </button>
-        <button id="roulette-action-btn" class="py-2.5 px-4 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-semibold text-xs transition flex items-center gap-2 shadow-lg shadow-amber-500/20">
-          <i class="fa-solid fa-eye"></i> Ver detalles
+        <button id="surprise-add-watchlist-btn" class="hidden w-full sm:w-auto py-2.5 px-5 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-bold text-xs transition flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20">
+          <i class="fa-solid fa-plus"></i> Agregar a mi Watchlist
         </button>
       </div>
     </div>
@@ -1388,7 +1402,7 @@ Instrucciones obligatorias para cada recomendación:
               ${it.status === 'Visto' ? `
                 <div class="bg-black/75 backdrop-blur-md text-amber-400 border border-amber-500/20 px-2.5 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 shadow">
                   <div class="flex items-center gap-0.5 text-[11px]">${starsHtml}</div>
-                  <span class="text-white font-bold ml-1">${Number(it.rating || 0).toFixed(1)} / 5</span>
+                  <span class="text-white font-bold ml-1">${Number(it.rating || 0).toFixed(1)} <span class="text-zinc-400 font-medium text-[11px]">/ 5.0</span></span>
                 </div>
               ` : `<span class="text-[10px] bg-black/60 text-zinc-300 px-2 py-0.5 rounded-md border border-white/10">Pendiente</span>`}
               <button onclick="event.stopPropagation(); deleteItem('${it.id}')" class="text-zinc-500 hover:text-rose-400 text-xs transition"><i class="fa-solid fa-trash"></i></button>
@@ -1420,7 +1434,7 @@ Instrucciones obligatorias para cada recomendación:
                   ${it.status === 'Visto' ? `
                     <div class="bg-black/75 backdrop-blur-md text-amber-400 border border-amber-500/20 px-2.5 py-1 rounded-lg text-xs font-semibold flex items-center gap-1.5 shadow">
                       <div class="flex items-center gap-0.5 text-[10px]">${starsHtml}</div>
-                      <span class="text-white font-bold ml-0.5">${Number(it.rating || 0).toFixed(1)}</span>
+                      <span class="text-white font-bold ml-0.5">${Number(it.rating || 0).toFixed(1)} <span class="text-zinc-400 font-medium text-[10px]">/ 5.0</span></span>
                     </div>
                   ` : `<span class="bg-black/60 backdrop-blur-md text-zinc-300 border border-white/10 px-2 py-0.5 rounded-md text-[11px] font-medium">Pendiente</span>`}
                 </div>
@@ -1503,65 +1517,161 @@ Instrucciones obligatorias para cada recomendación:
 
       if(vistos.length > 0) {
         const sum = vistos.reduce((acc, curr) => acc + (curr.rating || 0), 0);
-        document.getElementById('stat-avg').textContent = `${(sum / vistos.length).toFixed(1)} / 5`;
+        const avgVal = (sum / vistos.length).toFixed(1);
+        document.getElementById('stat-avg-num').textContent = avgVal;
+        document.getElementById('stat-avg').textContent = `${avgVal} / 5.0`;
         document.getElementById('stat-top').textContent = vistos.filter(i => (i.rating || 0) >= 4.5).length;
       } else {
-        document.getElementById('stat-avg').textContent = '0.0 / 5';
+        document.getElementById('stat-avg-num').textContent = '0.0';
+        document.getElementById('stat-avg').textContent = '0.0 / 5.0';
         document.getElementById('stat-top').textContent = '0';
       }
     }
 
-    function openRouletteModal() {
-      const modal = document.getElementById('modal-roulette');
+    // Variables de estado para "Sorpréndeme" 2026 con rotación de géneros
+    const SURPRISE_GENRES_ROTATION = [
+      { id: 28, name: 'Acción' },
+      { id: 53, name: 'Suspenso / Thriller' },
+      { id: 878, name: 'Ciencia Ficción' },
+      { id: 16, name: 'Animación' },
+      { id: 18, name: 'Drama' },
+      { id: 80, name: 'Crimen' }
+    ];
+    let surpriseGenrePointer = 0;
+    let surpriseViewedIds = new Set();
+
+    function openSurpriseModal() {
+      const modal = document.getElementById('modal-surprise');
+      const content = document.getElementById('modal-surprise-content');
       modal.classList.remove('hidden');
-      spinRoulette();
+
+      setTimeout(() => {
+        content.classList.remove('scale-95', 'opacity-0');
+        content.classList.add('scale-100', 'opacity-100');
+      }, 10);
+
+      fetchSurpriseMovie();
     }
 
-    function spinRoulette() {
-      let candidatePool = items.filter(i => i.status === 'Watchlist' && activePlatforms.includes(i.platform));
-      
-      if (candidatePool.length === 0) {
-        candidatePool = items.filter(i => (i.rating || 0) >= 4.0 && activePlatforms.includes(i.platform));
-      }
-      
-      if (candidatePool.length === 0) {
-        candidatePool = items;
-      }
+    async function fetchSurpriseMovie() {
+      const bodyContainer = document.getElementById('surprise-body-container');
+      const badgeHeader = document.getElementById('surprise-genre-badge-header');
+      const addBtn = document.getElementById('surprise-add-watchlist-btn');
 
-      const resultContainer = document.getElementById('roulette-result-card');
-      const actionBtn = document.getElementById('roulette-action-btn');
+      addBtn.classList.add('hidden');
+      const currentGenre = SURPRISE_GENRES_ROTATION[surpriseGenrePointer];
+      
+      // Avanzar puntero circularmente para el siguiente clic
+      surpriseGenrePointer = (surpriseGenrePointer + 1) % SURPRISE_GENRES_ROTATION.length;
 
-      if (candidatePool.length === 0) {
-        resultContainer.innerHTML = `
-          <div class="text-center py-6 space-y-2 text-zinc-400">
-            <i class="fa-solid fa-film text-2xl text-amber-500"></i>
-            <p class="text-xs">No hay elementos en tu Watchlist ni obras calificadas con nota alta en tus plataformas activas.</p>
+      badgeHeader.innerHTML = `Género actual: <span class="bg-amber-500/20 border border-amber-500/40 text-amber-400 px-2.5 py-0.5 rounded-full text-[11px] font-semibold">${currentGenre.name}</span>`;
+
+      bodyContainer.innerHTML = `
+        <div class="flex flex-col items-center justify-center py-16 space-y-3">
+          <div class="w-10 h-10 border-4 border-amber-500 border-t-transparent rounded-full animate-spin"></div>
+          <p class="text-xs text-zinc-400 font-medium">Buscando estreno 2026 (${currentGenre.name}) en TMDB...</p>
+        </div>
+      `;
+
+      const tmdbKey = localStorage.getItem('tmdb_api_key');
+      if (!tmdbKey) {
+        bodyContainer.innerHTML = `
+          <div class="text-center py-12 space-y-3 p-4 bg-zinc-900/60 rounded-2xl border border-zinc-800">
+            <i class="fa-solid fa-key text-3xl text-amber-400"></i>
+            <h4 class="text-sm font-bold text-white">TMDB API Key Requerida</h4>
+            <p class="text-xs text-zinc-400">Configura tu clave de TMDB en el panel de Ajustes (icono de engranaje) para usar "Sorpréndeme".</p>
+            <button onclick="closeModal('modal-surprise'); openSettingsModal();" class="py-2 px-4 rounded-xl bg-amber-500 text-black font-semibold text-xs transition">Ir a Ajustes</button>
           </div>
         `;
-        actionBtn.onclick = () => closeModal('modal-roulette');
         return;
       }
 
-      const chosen = candidatePool[Math.floor(Math.random() * candidatePool.length)];
-      const safeTitle = escapeHtml(chosen.title || 'Título');
+      try {
+        const url = `https://api.themoviedb.org/3/discover/movie?api_key=${tmdbKey}&language=es-ES&sort_by=popularity.desc&primary_release_year=2026&vote_count.gte=5&with_genres=${currentGenre.id}&page=1`;
+        const res = await fetch(url);
+        const data = await res.json();
 
-      resultContainer.innerHTML = `
-        <div class="flex gap-3 items-center">
-          ${chosen.poster ? `<img src="${escapeHtml(chosen.poster)}" class="w-14 h-20 object-cover rounded-xl border border-white/10 shrink-0">` : `<div class="w-14 h-20 bg-[#13151D] rounded-xl flex items-center justify-center shrink-0"><i class="fa-solid fa-film text-zinc-600"></i></div>`}
-          <div class="space-y-1 min-w-0">
-            <span class="bg-black/60 backdrop-blur-md text-zinc-300 border border-white/10 px-2 py-0.5 rounded-md text-[11px] font-medium">${escapeHtml(chosen.type)}</span>
-            <h4 class="text-sm font-bold text-white truncate">${safeTitle}</h4>
-            <p class="text-xs text-zinc-400">${escapeHtml(chosen.platform)} • ${chosen.status === 'Visto' ? `${renderStarsDisplay(chosen.rating)} ${chosen.rating}/5` : 'Pendiente'}</p>
-            ${chosen.creator ? `<p class="text-[11px] text-zinc-500 truncate">${escapeHtml(chosen.creator)}</p>` : ''}
+        if (!data.results || data.results.length === 0) {
+          bodyContainer.innerHTML = `
+            <div class="text-center py-12 space-y-3 text-zinc-400 text-xs">
+              <i class="fa-solid fa-film text-3xl text-amber-500/40"></i>
+              <p>No se encontraron estrenos 2026 para el género ${currentGenre.name}. ¡Prueba otro género!</p>
+            </div>
+          `;
+          return;
+        }
+
+        // Filtrar títulos que ya existan en el catálogo local del usuario (localStorage)
+        const localTitles = new Set(items.map(i => (i.title || '').toLowerCase().trim()));
+        const availableResults = data.results.filter(m => {
+          const title = (m.title || m.name || '').toLowerCase().trim();
+          return !localTitles.has(title) && !surpriseViewedIds.has(m.id);
+        });
+
+        // Si ya se vieron todos o no quedan suficientes, tomar aleatoriamente de los primeros 10 resultados
+        const pool = availableResults.length > 0 ? availableResults : data.results;
+        const candidateSlice = pool.slice(0, 10);
+        const chosen = candidateSlice[Math.floor(Math.random() * candidateSlice.length)];
+
+        surpriseViewedIds.add(chosen.id);
+
+        const title = chosen.title || chosen.name || 'Sin título';
+        const poster = chosen.poster_path ? `https://image.tmdb.org/t/p/w500${chosen.poster_path}` : '';
+        const backdrop = chosen.backdrop_path ? `https://image.tmdb.org/t/p/w1280${chosen.backdrop_path}` : '';
+        const overview = chosen.overview || 'Sin sinopsis disponible en español.';
+        const voteAvg10 = chosen.vote_average || 7.5;
+        const voteAvg5 = Number((voteAvg10 / 2).toFixed(1));
+
+        bodyContainer.innerHTML = `
+          <div class="flex flex-col sm:flex-row gap-4 items-start">
+            ${poster ? `<img src="${poster}" class="w-28 aspect-[2/3] object-cover rounded-2xl border border-zinc-800 shadow-xl shrink-0 mx-auto sm:mx-0">` : `<div class="w-28 aspect-[2/3] bg-zinc-900 rounded-2xl flex items-center justify-center text-zinc-600 shrink-0 mx-auto"><i class="fa-solid fa-film text-2xl"></i></div>`}
+            <div class="space-y-2.5 flex-1 min-w-0">
+              <div class="flex items-center gap-2">
+                <span class="bg-amber-500/20 text-amber-400 border border-amber-500/30 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider">Estreno 2026</span>
+                <div class="bg-zinc-900 border border-zinc-800 px-2 py-0.5 rounded-md text-amber-400 text-xs font-bold flex items-center gap-1">
+                  <i class="fa-solid fa-star text-[10px]"></i> ${voteAvg5} / 5.0
+                </div>
+              </div>
+              <h4 class="text-base sm:text-lg font-black text-white leading-snug">${escapeHtml(title)}</h4>
+              <p class="text-xs text-zinc-300 leading-relaxed max-h-32 overflow-y-auto pr-1">${escapeHtml(overview)}</p>
+            </div>
           </div>
-        </div>
-        ${chosen.review ? `<p class="text-xs text-zinc-300 italic bg-[#13151D] p-2.5 rounded-xl border border-white/5 line-clamp-2">"${escapeHtml(chosen.review)}"</p>` : ''}
-      `;
+        `;
 
-      actionBtn.onclick = () => {
-        closeModal('modal-roulette');
-        openDetailModal(chosen);
-      };
+        addBtn.classList.remove('hidden');
+        addBtn.onclick = () => {
+          const newItem = {
+            id: Date.now().toString(),
+            title: title,
+            type: 'Película',
+            status: 'Watchlist',
+            platform: activePlatforms[0] || 'Netflix',
+            rating: null,
+            creator: '2026',
+            genres: [currentGenre.name],
+            seasons: [],
+            review: overview,
+            poster: poster,
+            backdrop: backdrop,
+            date: new Date().toISOString()
+          };
+
+          items.unshift(newItem);
+          localStorage.setItem('cinelog_items', JSON.stringify(items));
+          closeModal('modal-surprise');
+          renderCatalog();
+          updateStats();
+          alert(`¡"${title}" agregado a tu Watchlist exitosamente!`);
+        };
+
+      } catch (err) {
+        bodyContainer.innerHTML = `
+          <div class="text-center py-12 space-y-2 text-rose-400 text-xs">
+            <i class="fa-solid fa-triangle-exclamation text-2xl"></i>
+            <p>Error al conectar con TMDB. Verifica tu conexión o API Key.</p>
+          </div>
+        `;
+      }
     }
 
     function openRegisterModal(prefill = null) { 
@@ -1657,7 +1767,7 @@ Instrucciones obligatorias para cada recomendación:
             <div class="flex items-center gap-3">
               <span class="text-zinc-400">${s.status}</span>
               <span class="font-black text-amber-400 flex items-center gap-1">
-                <span class="text-[10px]">${renderStarsDisplay(s.rating)}</span> ${s.rating}/5
+                <span class="text-[10px]">${renderStarsDisplay(s.rating)}</span> ${Number(s.rating || 0).toFixed(1)} <span class="text-zinc-400 font-medium text-[10px]">/ 5.0</span>
               </span>
             </div>
           </div>
@@ -1673,7 +1783,7 @@ Instrucciones obligatorias para cada recomendación:
           <div class="flex items-center justify-between">
             <span class="text-xs font-bold text-emerald-400 flex items-center gap-1.5"><i class="fa-solid fa-check-circle"></i> En tu Catálogo Personal</span>
             <div class="flex items-center gap-1.5 text-amber-400 text-xs font-bold">
-              ${existingItem.status === 'Visto' ? `<div class="flex items-center gap-0.5 text-[11px]">${renderStarsDisplay(existingItem.rating)}</div> <span>${Number(existingItem.rating || 0).toFixed(1)} / 5</span>` : 'Pendiente'}
+              ${existingItem.status === 'Visto' ? `<div class="flex items-center gap-0.5 text-[11px]">${renderStarsDisplay(existingItem.rating)}</div> <span>${Number(existingItem.rating || 0).toFixed(1)} <span class="text-zinc-400 font-medium text-xs">/ 5.0</span></span>` : 'Pendiente'}
             </div>
           </div>
           <p class="text-xs text-zinc-300">Plataforma: <span class="text-white font-medium">${existingItem.platform}</span> • Estado: <span class="text-white font-medium">${existingItem.status}</span></p>
